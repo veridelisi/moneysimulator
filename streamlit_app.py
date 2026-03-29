@@ -8,7 +8,7 @@ st.markdown("""
         section[data-testid="stSidebar"][aria-expanded="true"]{display: none;}
 
         .hero-container {
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            background: linear-gradient(135deg, #e8eef7 0%, #dbeafe 100%);
             padding: 3rem 2rem;
             border-radius: 20px;
             color: white;
@@ -265,7 +265,7 @@ st.markdown("""
         <div style="border-top:1px solid #475569;padding-top:1.5rem;margin-top:1.5rem">
             <a href="https://veridelisi.substack.com/">📰 Veri Delisi Substack</a><br>
             <span style="color:#94a3b8">Created by</span> <strong>Engin Yılmaz</strong> •
-            <span style="color:#94a3b8">2025</span>
+            <span style="color:#94a3b8">2026</span>
         </div>
     </div>
 """, unsafe_allow_html=True)
