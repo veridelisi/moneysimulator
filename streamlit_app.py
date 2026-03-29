@@ -16,137 +16,71 @@ st.markdown("""
             margin: 2rem 0;
             box-shadow: 0 20px 40px rgba(0,0,0,0.15);
         }
-        .hero-title {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-        .hero-subtitle {
-            font-size: 1.3rem;
-            opacity: 0.9;
-            margin-bottom: 1.5rem;
-            font-weight: 300;
-        }
-        .hero-description {
-            font-size: 1.1rem;
-            opacity: 0.8;
-            max-width: 650px;
-            margin: 0 auto;
-            line-height: 1.6;
-        }
-        .project-card {
+        .hero-title { font-size: 3rem; font-weight: 700; margin-bottom: 1rem; }
+        .hero-subtitle { font-size: 1.3rem; opacity: 0.9; margin-bottom: 1.5rem; font-weight: 300; }
+        .hero-description { font-size: 1.1rem; opacity: 0.8; max-width: 650px; margin: 0 auto; line-height: 1.6; }
+
+        .mini-card {
             background: white;
-            border-radius: 20px;
-            padding: 0;
-            margin: 1.5rem 0;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             border: 1px solid #e2e8f0;
-            overflow: hidden;
+            transition: all 0.3s ease;
         }
-        .card-header {
-            padding: 2rem 2rem 1rem 2rem;
-            border-radius: 20px 20px 0 0;
-            position: relative;
-            color: white;
-            overflow: hidden;
+        .mini-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.13);
+            border-color: transparent;
         }
-        .card-header::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(255,255,255,0.08);
-        }
-        .card-content { position: relative; z-index: 2; }
-        .card-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            display: block;
-        }
-        .card-badge {
+        .mini-card-header { padding: 1.2rem 1.2rem 0.8rem 1.2rem; }
+        .mini-card-icon { font-size: 1.8rem; display: block; margin-bottom: 0.5rem; }
+        .mini-card-badge {
             display: inline-block;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.25);
             color: white;
-            padding: 6px 16px;
-            border-radius: 25px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.65rem;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.8px;
             border: 1px solid rgba(255,255,255,0.3);
+            margin-bottom: 0.5rem;
         }
-        .card-title {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: white;
-            margin: 0;
-            line-height: 1.3;
-        }
-        .card-body { padding: 1.5rem 2rem 1rem 2rem; }
-        .card-tagline {
-            color: #64748b;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .card-description {
-            color: #475569;
-            line-height: 1.7;
-            font-size: 0.95rem;
-        }
-        .gradient-fed      { background: linear-gradient(135deg, #1e3a5f 0%, #0f2a47 100%); }
-        .gradient-treasury { background: linear-gradient(135deg, #10b981 0%, #047857 100%); }
-        .gradient-banks    { background: linear-gradient(135deg, #f59e0b 0%, #b45309 100%); }
-        .gradient-karma    { background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); }
+        .mini-card-title { font-size: 1rem; font-weight: 700; color: white; margin: 0; line-height: 1.3; }
+        .mini-card-body { padding: 0.9rem 1.2rem 0.5rem 1.2rem; }
+        .mini-card-desc { color: #64748b; font-size: 0.82rem; line-height: 1.5; }
 
-        .stats-container {
+        .g-fed      { background: linear-gradient(135deg, #1e3a5f 0%, #2d5a9e 100%); }
+        .g-treasury { background: linear-gradient(135deg, #047857 0%, #10b981 100%); }
+        .g-banks    { background: linear-gradient(135deg, #b45309 0%, #f59e0b 100%); }
+        .g-combined { background: linear-gradient(135deg, #6d28d9 0%, #8b5cf6 100%); }
+
+        .stat-box {
             background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            border-radius: 20px;
-            padding: 2.5rem;
-            margin: 2rem 0;
+            border-radius: 16px;
+            padding: 1.5rem;
             text-align: center;
             border: 1px solid #e2e8f0;
         }
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #1e3a5f;
-            display: block;
-        }
-        .stat-label {
-            font-size: 0.9rem;
-            color: #64748b;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-weight: 600;
-        }
+        .stat-number { font-size: 2.2rem; font-weight: 700; color: #1e3a5f; display: block; }
+        .stat-label { font-size: 0.85rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+
         .category-header {
             background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-            padding: 1.5rem 2rem;
-            border-radius: 16px;
-            margin: 3rem 0 2rem 0;
+            padding: 1.2rem 1.8rem;
+            border-radius: 14px;
+            margin: 2.5rem 0 1.2rem 0;
             border-left: 5px solid #1e3a5f;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.05);
         }
-        .category-title {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #1e293b;
-            margin: 0;
-        }
-        .category-subtitle {
-            font-size: 1rem;
-            color: #64748b;
-            margin: 0.5rem 0 0 0;
-            font-weight: 400;
-        }
+        .category-title { font-size: 1.3rem; font-weight: 700; color: #1e293b; margin: 0; }
+        .category-subtitle { font-size: 0.9rem; color: #64748b; margin: 0.3rem 0 0 0; }
+
         .footer {
             background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
             color: white;
-            padding: 3rem 2rem;
+            padding: 2.5rem 2rem;
             border-radius: 20px;
             text-align: center;
             margin-top: 4rem;
@@ -168,142 +102,170 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ── Stats ─────────────────────────────────────────────────────────────────────
-st.markdown("""
-    <div class="stats-container">
-        <div style="display: flex; justify-content: space-around; flex-wrap: wrap;">
-            <div>
-                <span class="stat-number">4</span>
-                <span class="stat-label">Categories</span>
+s1, s2, s3, s4 = st.columns(4)
+for col, num, label in [
+    (s1, "4",    "Categories"),
+    (s2, "20+",  "Scenarios"),
+    (s3, "T-Acc","Accounting"),
+    (s4, "Flow", "Visualization"),
+]:
+    with col:
+        st.markdown(f'<div class="stat-box"><span class="stat-number">{num}</span><span class="stat-label">{label}</span></div>', unsafe_allow_html=True)
+
+# ── Helpers ───────────────────────────────────────────────────────────────────
+def mini_card(col, card, gradient):
+    with col:
+        st.markdown(f"""
+        <div class="mini-card">
+            <div class="mini-card-header {gradient}">
+                <span class="mini-card-icon">{card['icon']}</span>
+                <span class="mini-card-badge">{card['badge']}</span>
+                <p class="mini-card-title">{card['title']}</p>
             </div>
-            <div>
-                <span class="stat-number">20+</span>
-                <span class="stat-label">Scenarios</span>
-            </div>
-            <div>
-                <span class="stat-number">T-Acc</span>
-                <span class="stat-label">Accounting</span>
-            </div>
-            <div>
-                <span class="stat-number">Flow</span>
-                <span class="stat-label">Visualization</span>
+            <div class="mini-card-body">
+                <div class="mini-card-desc">{card['desc']}</div>
             </div>
         </div>
-    </div>
-""", unsafe_allow_html=True)
+        """, unsafe_allow_html=True)
+        st.markdown("<div style='height:6px'></div>", unsafe_allow_html=True)
+        if st.button("Explore →", key=card["key"]):
+            st.switch_page(card["page"])
 
-# ── Card helper ───────────────────────────────────────────────────────────────
-def scenario_card(title, tagline, description, icon, gradient_class, badge_text, page_path, btn_key):
+
+def render_section(title, subtitle, rows, gradient, border_color):
     st.markdown(f"""
-    <div class="project-card">
-        <div class="card-header {gradient_class}">
-            <div class="card-content">
-                <span class="card-icon">{icon}</span>
-                <span class="card-badge">{badge_text}</span>
-                <h3 class="card-title">{title}</h3>
-            </div>
+        <div class="category-header" style="border-left-color:{border_color}">
+            <div class="category-title">{title}</div>
+            <div class="category-subtitle">{subtitle}</div>
         </div>
-        <div class="card-body">
-            <div class="card-tagline">{tagline}</div>
-            <div class="card-description">{description}</div>
-        </div>
-    </div>
     """, unsafe_allow_html=True)
-    if st.button("Explore →", key=btn_key):
-        st.switch_page(page_path)
+    for row in rows:
+        # Always 4 columns; empty cols stay blank
+        cols = st.columns(4, gap="medium")
+        for i, card in enumerate(row):
+            mini_card(cols[i], card, gradient)
+        st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
 
-# ── FED ───────────────────────────────────────────────────────────────────────
-st.markdown("""
-    <div class="category-header">
-        <h2 class="category-title">🏛️ Federal Reserve Operations</h2>
-        <p class="category-subtitle">Open market operations, QE, repo, and reserve management</p>
-    </div>
-""", unsafe_allow_html=True)
+# ══════════════════════════════════════════════════════════════════════════════
+# SCENARIO DATA
+# To add a new row: append a new list of up to 4 dicts inside the section list.
+# To add a new card to a row: append a dict to an existing inner list.
+# ══════════════════════════════════════════════════════════════════════════════
 
-scenario_card(
-    title="Federal Reserve Operations",
-    tagline="QE • OMO • Repo • Reserve Management",
-    description="Explore how the Fed creates reserves through open market operations, "
-                "quantitative easing, and repo facilities. Step-by-step T-account walkthroughs.",
-    icon="🏛️",
-    gradient_class="gradient-fed",
-    badge_text="FED",
-    page_path="pages/01_fed.py",
-    btn_key="btn_fed",
-)
+FED = [
+    # ── Row 1 ──
+    [
+        dict(icon="🖨️", badge="QE",   title="Quantitative Easing",
+             desc="How the Fed buys bonds and creates reserves from thin air.",
+             page="pages/01_fed.py", key="fed_qe"),
+        dict(icon="🔄", badge="OMO",  title="Open Market Operations",
+             desc="Day-to-day reserve injection via Treasury bill purchases.",
+             page="pages/01_fed.py", key="fed_omo"),
+        dict(icon="🏦", badge="Repo", title="Repo Facility",
+             desc="Overnight collateralized lending to primary dealers.",
+             page="pages/01_fed.py", key="fed_repo"),
+        dict(icon="↩️", badge="RRP",  title="Reverse Repo",
+             desc="Draining excess liquidity through overnight reverse repos.",
+             page="pages/01_fed.py", key="fed_rrp"),
+    ],
+    # ── Row 2 ──
+    [
+        dict(icon="📉", badge="QT",   title="Quantitative Tightening",
+             desc="Balance sheet runoff and its effect on reserve levels.",
+             page="pages/01_fed.py", key="fed_qt"),
+        dict(icon="💳", badge="IOR",  title="Interest on Reserves",
+             desc="How IORB sets the floor for the federal funds rate.",
+             page="pages/01_fed.py", key="fed_ior"),
+        dict(icon="🆘", badge="LOLR", title="Lender of Last Resort",
+             desc="Emergency discount window lending during stress events.",
+             page="pages/01_fed.py", key="fed_lolr"),
+        dict(icon="🌐", badge="Swap", title="FX Swap Lines",
+             desc="Dollar liquidity provision to foreign central banks.",
+             page="pages/01_fed.py", key="fed_swap"),
+    ],
+]
 
-# ── TREASURY ──────────────────────────────────────────────────────────────────
-st.markdown("""
-    <div class="category-header">
-        <h2 class="category-title">💰 Treasury Operations</h2>
-        <p class="category-subtitle">Bond issuance, TGA movements, and reserve effects</p>
-    </div>
-""", unsafe_allow_html=True)
+TREASURY = [
+    # ── Row 1 ──
+    [
+        dict(icon="📜", badge="Issue",   title="Bond Issuance",
+             desc="How Treasury auctions drain reserves from the banking system.",
+             page="pages/02_treasury.py", key="tsy_issuance"),
+        dict(icon="🏛️", badge="TGA",    title="TGA Drawdown",
+             desc="Government spending and how it injects reserves back.",
+             page="pages/02_treasury.py", key="tsy_tga"),
+        dict(icon="💵", badge="Bills",   title="T-Bill Rollover",
+             desc="Short-term bill rollover mechanics and reserve impact.",
+             page="pages/02_treasury.py", key="tsy_bills"),
+        dict(icon="📊", badge="Deficit", title="Deficit Financing",
+             desc="How borrowing to fund a deficit affects bank reserves.",
+             page="pages/02_treasury.py", key="tsy_deficit"),
+    ],
+]
 
-scenario_card(
-    title="Treasury Operations",
-    tagline="Bond Issuance • TGA • Reserve Impact",
-    description="See how Treasury bond issuance drains reserves and how government spending "
-                "injects them back. Follow the TGA balance through each transaction.",
-    icon="💰",
-    gradient_class="gradient-treasury",
-    badge_text="Treasury",
-    page_path="pages/02_treasury.py",
-    btn_key="btn_treasury",
-)
+BANKS = [
+    # ── Row 1 ──
+    [
+        dict(icon="💰", badge="Credit",    title="Credit Creation",
+             desc="Banks create deposits when they lend — the multiplier myth busted.",
+             page="pages/03_banks.py", key="bnk_credit"),
+        dict(icon="↔️", badge="Transfer",  title="Reserve Transfer",
+             desc="How interbank payments move reserves across Fed accounts.",
+             page="pages/03_banks.py", key="bnk_transfer"),
+        dict(icon="🏧", badge="Withdraw",  title="Cash Withdrawal",
+             desc="Withdrawal mechanics and reserve drain on a single bank.",
+             page="pages/03_banks.py", key="bnk_withdraw"),
+        dict(icon="📋", badge="Capital",   title="Capital Requirements",
+             desc="How regulatory capital ratios constrain credit expansion.",
+             page="pages/03_banks.py", key="bnk_capital"),
+    ],
+]
 
-# ── BANKS ─────────────────────────────────────────────────────────────────────
-st.markdown("""
-    <div class="category-header">
-        <h2 class="category-title">🏦 Banking System</h2>
-        <p class="category-subtitle">Credit creation, reserve transfers, and deposit mechanics</p>
-    </div>
-""", unsafe_allow_html=True)
+COMBINED = [
+    # ── Row 1 ──
+    [
+        dict(icon="⚡", badge="QE+Bond", title="QE & Bond Issuance",
+             desc="When the Fed buys exactly what Treasury issues — net reserve effect.",
+             page="pages/04_karma.py", key="cmb_qe_bond"),
+        dict(icon="🔁", badge="Fiscal",  title="Fiscal + Monetary Mix",
+             desc="Deficit spending financed by QE — helicopter money dynamics.",
+             page="pages/04_karma.py", key="cmb_fiscal"),
+        dict(icon="🌊", badge="Crisis",  title="Crisis Playbook",
+             desc="2008 & 2020: LOLR + QE + fiscal stimulus in one flow.",
+             page="pages/04_karma.py", key="cmb_crisis"),
+        dict(icon="🔜", badge="Soon",    title="Coming Soon",
+             desc="More combined scenarios in progress.",
+             page="pages/04_karma.py", key="cmb_soon"),
+    ],
+]
 
-scenario_card(
-    title="Banking System",
-    tagline="Credit Creation • Reserve Transfer • Deposits",
-    description="Understand how banks create money through lending, how reserves move "
-                "between institutions, and what really happens on both sides of the balance sheet.",
-    icon="🏦",
-    gradient_class="gradient-banks",
-    badge_text="Banks",
-    page_path="pages/03_banks.py",
-    btn_key="btn_banks",
-)
+# ── Render all sections ───────────────────────────────────────────────────────
+render_section("🏛️ Federal Reserve Operations",
+               "Open market operations, QE, repo, and reserve management",
+               FED, "g-fed", "#1e3a5f")
 
-# ── COMBINED ──────────────────────────────────────────────────────────────────
-st.markdown("""
-    <div class="category-header">
-        <h2 class="category-title">🔀 Combined Scenarios</h2>
-        <p class="category-subtitle">FED + Treasury + Banks interactions and net effects</p>
-    </div>
-""", unsafe_allow_html=True)
+render_section("💰 Treasury Operations",
+               "Bond issuance, TGA movements, and reserve effects",
+               TREASURY, "g-treasury", "#047857")
 
-scenario_card(
-    title="Combined Scenarios",
-    tagline="FED + Treasury + Banks • Net Reserve Effects",
-    description="What happens when QE and bond issuance occur simultaneously? "
-                "Explore how the three actors interact and offset each other.",
-    icon="⚡",
-    gradient_class="gradient-karma",
-    badge_text="Combined",
-    page_path="pages/04_karma.py",
-    btn_key="btn_karma",
-)
+render_section("🏦 Banking System",
+               "Credit creation, reserve transfers, and deposit mechanics",
+               BANKS, "g-banks", "#b45309")
+
+render_section("🔀 Combined Scenarios",
+               "FED + Treasury + Banks interactions and net effects",
+               COMBINED, "g-combined", "#6d28d9")
 
 # ── Footer ────────────────────────────────────────────────────────────────────
 st.markdown("""
     <div class="footer">
-        <h3 style="margin-top: 0;">About MoneySimulator</h3>
-        <p style="margin-bottom: 1.5rem;">
-            An educational simulation platform visualizing Federal Reserve, Treasury, 
-            and banking system operations through accounting entries and flow diagrams.
-        </p>
-        <div style="border-top: 1px solid #475569; padding-top: 1.5rem; margin-top: 1.5rem;">
+        <h3 style="margin-top:0">About MoneySimulator</h3>
+        <p>An educational platform visualizing Federal Reserve, Treasury, and banking system
+        operations through accounting entries and flow diagrams.</p>
+        <div style="border-top:1px solid #475569;padding-top:1.5rem;margin-top:1.5rem">
             <a href="https://veridelisi.substack.com/">📰 Veri Delisi Substack</a><br>
-            <span style="color: #94a3b8;">Created by</span>
-            <strong>Engin Yılmaz</strong> •
-            <span style="color: #94a3b8;">2025</span>
+            <span style="color:#94a3b8">Created by</span> <strong>Engin Yılmaz</strong> •
+            <span style="color:#94a3b8">2025</span>
         </div>
     </div>
 """, unsafe_allow_html=True)
