@@ -240,6 +240,11 @@ COMBINED = [
 ]
 
 # ── Render all sections ───────────────────────────────────────────────────────
+
+render_section("🏦 Banking System",
+               "Credit creation, reserve transfers, and deposit mechanics",
+               BANKS, "g-banks", "#b45309")
+
 render_section("🏛️ Federal Reserve Operations",
                "Open market operations, QE, repo, and reserve management",
                FED, "g-fed", "#1e3a5f")
@@ -247,10 +252,6 @@ render_section("🏛️ Federal Reserve Operations",
 render_section("💰 Treasury Operations",
                "Bond issuance, TGA movements, and reserve effects",
                TREASURY, "g-treasury", "#047857")
-
-render_section("🏦 Banking System",
-               "Credit creation, reserve transfers, and deposit mechanics",
-               BANKS, "g-banks", "#b45309")
 
 render_section("🔀 Combined Scenarios",
                "FED + Treasury + Banks interactions and net effects",
