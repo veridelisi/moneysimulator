@@ -15,7 +15,7 @@ section[data-testid="stSidebar"][aria-expanded="true"]{display: none;}
 
 /* ── Hero ── */
 .hero {
-    background: #1E1B4B;
+    background: #667eea;
     border-radius: 16px;
     padding: 2.5rem 2rem;
     text-align: center;
