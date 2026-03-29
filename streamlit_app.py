@@ -244,6 +244,11 @@ COMBINED = [
 # ══════════════════════════════════════════════════════════════════════════════
 # RENDER
 # ══════════════════════════════════════════════════════════════════════════════
+
+section("🏦 Banking System",
+        "Credit creation, reserve transfers, and deposit mechanics", "sh-banks")
+render_rows(BANKS, "ch-banks", "pages/03_banks.py")
+
 section("🏛️ Federal Reserve Operations",
         "Open market operations, QE, repo, and reserve management", "sh-fed")
 render_rows(FED, "ch-fed", "pages/01_fed.py")
@@ -252,9 +257,6 @@ section("💰 Treasury Operations",
         "Bond issuance, TGA movements, and reserve effects", "sh-treasury")
 render_rows(TREASURY, "ch-treasury", "pages/02_treasury.py")
 
-section("🏦 Banking System",
-        "Credit creation, reserve transfers, and deposit mechanics", "sh-banks")
-render_rows(BANKS, "ch-banks", "pages/03_banks.py")
 
 section("🔀 Combined Scenarios",
         "FED + Treasury + Banks interactions and net effects", "sh-combined")
