@@ -1,49 +1,40 @@
 import streamlit as st
 
-st.set_page_config(page_title="Veridelisi • Analytics Portal", layout="wide", page_icon="VD")
+st.set_page_config(page_title="MoneySimulator", layout="wide", page_icon="💵")
 
-# Enhanced CSS styling with gradient + icon system
 st.markdown("""
     <style>
         [data-testid="stSidebarNav"] {display: none;}
         section[data-testid="stSidebar"][aria-expanded="true"]{display: none;}
-        
-        /* Hero section styling */
-            
-            
+
         .hero-container {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e3a5f 0%, #0f2a47 100%);
             padding: 3rem 2rem;
             border-radius: 20px;
             color: white;
             text-align: center;
             margin: 2rem 0;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
         }
-        
         .hero-title {
             font-size: 3rem;
             font-weight: 700;
             margin-bottom: 1rem;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
-        
         .hero-subtitle {
             font-size: 1.3rem;
             opacity: 0.9;
             margin-bottom: 1.5rem;
             font-weight: 300;
         }
-        
         .hero-description {
             font-size: 1.1rem;
             opacity: 0.8;
-            max-width: 600px;
+            max-width: 650px;
             margin: 0 auto;
             line-height: 1.6;
         }
-        
-        /* Enhanced project cards with gradient + icon */
         .project-card {
             background: white;
             border-radius: 20px;
@@ -51,17 +42,8 @@ st.markdown("""
             margin: 1.5rem 0;
             box-shadow: 0 12px 40px rgba(0,0,0,0.1);
             border: 1px solid #e2e8f0;
-            transition: all 0.4s ease;
             overflow: hidden;
-            position: relative;
         }
-        
-        .project-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 24px 60px rgba(0,0,0,0.15);
-            border-color: transparent;
-        }
-        
         .card-header {
             padding: 2rem 2rem 1rem 2rem;
             border-radius: 20px 20px 0 0;
@@ -69,30 +51,18 @@ st.markdown("""
             color: white;
             overflow: hidden;
         }
-        
         .card-header::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255,255,255,0.08);
         }
-        
-        .card-content {
-            position: relative;
-            z-index: 2;
-        }
-        
+        .card-content { position: relative; z-index: 2; }
         .card-icon {
             font-size: 3rem;
             margin-bottom: 1rem;
             display: block;
-            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
         }
-        
         .card-badge {
             display: inline-block;
             background: rgba(255,255,255,0.2);
@@ -106,72 +76,32 @@ st.markdown("""
             letter-spacing: 0.8px;
             border: 1px solid rgba(255,255,255,0.3);
         }
-        
         .card-title {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 700;
             color: white;
             margin: 0;
             line-height: 1.3;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
-        
-        .card-body {
-            padding: 1.5rem 2rem 2rem 2rem;
-        }
-        
+        .card-body { padding: 1.5rem 2rem 1rem 2rem; }
         .card-tagline {
             color: #64748b;
-            font-size: 0.9rem;
-            font-weight: 500;
-            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-        
         .card-description {
             color: #475569;
             line-height: 1.7;
-            margin-bottom: 1.5rem;
             font-size: 0.95rem;
         }
-        
-        .card-link {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white !important;
-            padding: 12px 24px;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: 600;
-            display: inline-block;
-            transition: all 0.3s ease;
-            border: none;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .card-link:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
-            color: white !important;
-            text-decoration: none;
-        }
-        
-        /* Gradient backgrounds for each dashboard */
-        .gradient-reserves { background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%); }
-        .gradient-repo { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
-        .gradient-tga { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
-        .gradient-balance { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); }
-        .gradient-rates { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); }
-        .gradient-desk { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); }
-        .gradient-eurodollar { background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%); }
-        .gradient-fdic { background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%); }
-        .gradient-yield { background: linear-gradient(135deg, #64748b 0%, #334155 100%); }
+        .gradient-fed      { background: linear-gradient(135deg, #1e3a5f 0%, #0f2a47 100%); }
+        .gradient-treasury { background: linear-gradient(135deg, #10b981 0%, #047857 100%); }
+        .gradient-banks    { background: linear-gradient(135deg, #f59e0b 0%, #b45309 100%); }
+        .gradient-karma    { background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); }
 
-
-        
-        /* Stats section */
         .stats-container {
             background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
             border-radius: 20px;
@@ -180,18 +110,12 @@ st.markdown("""
             text-align: center;
             border: 1px solid #e2e8f0;
         }
-        
-        .stat-item {
-            padding: 1rem;
-        }
-        
         .stat-number {
             font-size: 2.5rem;
             font-weight: 700;
-            color: #667eea;
+            color: #1e3a5f;
             display: block;
         }
-        
         .stat-label {
             font-size: 0.9rem;
             color: #64748b;
@@ -199,32 +123,26 @@ st.markdown("""
             letter-spacing: 0.5px;
             font-weight: 600;
         }
-        
-        /* Category headers */
         .category-header {
             background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
             padding: 1.5rem 2rem;
             border-radius: 16px;
             margin: 3rem 0 2rem 0;
-            border-left: 5px solid #667eea;
+            border-left: 5px solid #1e3a5f;
             box-shadow: 0 4px 16px rgba(0,0,0,0.05);
         }
-        
         .category-title {
             font-size: 1.4rem;
             font-weight: 700;
             color: #1e293b;
             margin: 0;
         }
-        
         .category-subtitle {
             font-size: 1rem;
             color: #64748b;
             margin: 0.5rem 0 0 0;
             font-weight: 400;
         }
-        
-        /* Footer styling */
         .footer {
             background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
             color: white;
@@ -232,70 +150,50 @@ st.markdown("""
             border-radius: 20px;
             text-align: center;
             margin-top: 4rem;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.1);
         }
-        
-        .footer a {
-            color: #60a5fa;
-            text-decoration: none;
-            font-weight: 600;
-        }
-        
-        .footer a:hover {
-            color: #93c5fd;
-        }
-        
-        /* Responsive design */
-        @media (max-width: 768px) {
-            .hero-title { font-size: 2rem; }
-            .hero-subtitle { font-size: 1.1rem; }
-            .card-title { font-size: 1.3rem; }
-            .stats-container { padding: 1.5rem; }
-        }
+        .footer a { color: #60a5fa; text-decoration: none; font-weight: 600; }
     </style>
-    """, unsafe_allow_html=True)
+""", unsafe_allow_html=True)
 
-# Hero Section
+# ── Hero ──────────────────────────────────────────────────────────────────────
 st.markdown("""
     <div class="hero-container">
-        <div class="hero-title">💥 Veridelisi Analytics Portal</div>
-        <div class="hero-subtitle">Financial Markets Intelligence & Data Analytics</div>
+        <div class="hero-title">💵 MoneySimulator</div>
+        <div class="hero-subtitle">Money Operations • Accounting • Flow Analysis</div>
         <div class="hero-description">
-            Comprehensive dashboards for Federal Reserve operations, money markets, and Treasury analytics. 
-            Real-time insights into liquidity conditions, market structure, and monetary policy implementation.
+            Explore how money moves through the Federal Reserve, Treasury, and banking system.
+            Every scenario is independent, step-by-step, and visualized with T-accounts and flow diagrams.
         </div>
     </div>
-    """, unsafe_allow_html=True)
+""", unsafe_allow_html=True)
 
-# Quick Stats
+# ── Stats ─────────────────────────────────────────────────────────────────────
 st.markdown("""
     <div class="stats-container">
         <div style="display: flex; justify-content: space-around; flex-wrap: wrap;">
-            <div class="stat-item">
-                <span class="stat-number">10</span>
-                <span class="stat-label">Dashboards</span>
+            <div>
+                <span class="stat-number">4</span>
+                <span class="stat-label">Categories</span>
             </div>
-            <div class="stat-item">
+            <div>
                 <span class="stat-number">20+</span>
-                <span class="stat-label">Data Sources</span>
+                <span class="stat-label">Scenarios</span>
             </div>
-            <div class="stat-item">
-                <span class="stat-number">Daily</span>
-                <span class="stat-label">Updates</span>
+            <div>
+                <span class="stat-number">T-Acc</span>
+                <span class="stat-label">Accounting</span>
             </div>
-            <div class="stat-item">
-                <span class="stat-number">Real-time</span>
-                <span class="stat-label">Analysis</span>
+            <div>
+                <span class="stat-number">Flow</span>
+                <span class="stat-label">Visualization</span>
             </div>
         </div>
     </div>
-    """, unsafe_allow_html=True)
+""", unsafe_allow_html=True)
 
-# Enhanced project card function with gradient + icon
-def gradient_project_card(title: str, tagline: str, description: str, page_path: str, 
-                         link_label: str, icon: str, gradient_class: str, badge_text: str):
-    
-    card_html = f"""
+# ── Card helper ───────────────────────────────────────────────────────────────
+def scenario_card(title, tagline, description, icon, gradient_class, badge_text, page_path, btn_key):
+    st.markdown(f"""
     <div class="project-card">
         <div class="card-header {gradient_class}">
             <div class="card-content">
@@ -309,245 +207,103 @@ def gradient_project_card(title: str, tagline: str, description: str, page_path:
             <div class="card-description">{description}</div>
         </div>
     </div>
-    """
-    
-    st.markdown(card_html, unsafe_allow_html=True)
-    st.page_link(page_path, label=link_label)
+    """, unsafe_allow_html=True)
+    if st.button("Explore →", key=btn_key):
+        st.switch_page(page_path)
 
-# Federal Reserve & Monetary Policy Section
+# ── FED ───────────────────────────────────────────────────────────────────────
 st.markdown("""
     <div class="category-header">
-        <h2 class="category-title">🏦 Federal Reserve & Monetary Policy</h2>
-        <p class="category-subtitle">Track Fed operations, balance sheet changes, and monetary policy implementation</p>
+        <h2 class="category-title">🏛️ Federal Reserve Operations</h2>
+        <p class="category-subtitle">Open market operations, QE, repo, and reserve management</p>
     </div>
-    """, unsafe_allow_html=True)
+""", unsafe_allow_html=True)
 
-col1, col2 = st.columns(2, gap="large")
-
-with col1:
-    gradient_project_card(
-        title="Fed Assets & Liabilities Impact on Bank Reserves",
-        tagline="Federal Reserve H.4.1 weekly release • Reserve drivers analysis",
-        description=(
-            "Comprehensive tracking of the Fed's weekly H.4.1 release with detailed breakdowns of "
-            "assets and liabilities. Identify primary drivers of reserve fluctuations and assess "
-            "their impact on overall liquidity conditions with interactive charts."
-        ),
-        page_path="pages/01_Reserves.py",
-        link_label="🔍 Explore Reserves Dashboard",
-        icon="🏦",
-        gradient_class="gradient-reserves",
-        badge_text="Weekly Data"
-    )
-
-with col2:
-    gradient_project_card(
-        title="NY Fed Desk Operations",
-        tagline="Daily & weekly market operations • Real-time monitoring",
-        description=(
-            "Monitor the Federal Reserve's daily market operations including repo and reverse repo "
-            "activities. Track operational flows, market interventions, and policy implementation "
-            "tools with historical context and trend analysis."
-        ),
-        page_path="pages/01_Desk.py",
-        link_label="🔍 View Desk Operations",
-        icon="⚙️",
-        gradient_class="gradient-desk",
-        badge_text="Daily Ops"
-    )
-
-# Money Markets Section
-st.markdown("""
-    <div class="category-header">
-        <h2 class="category-title">💰 Money Markets & Reference Rates</h2>
-        <p class="category-subtitle">Monitor short-term funding markets and benchmark rates</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-col1, col2 = st.columns(2, gap="large")
-
-with col1:
-    gradient_project_card(
-        title="Primary Dealer Repo & Reverse Repo",
-        tagline="NY Fed Primary Dealer Statistics • Net position analysis",
-        description=(
-            "Comprehensive view of primary dealer repo activities across all segments: uncleared/cleared "
-            "bilateral, GCF, and tri-party. Analyze net market positions and understand dealer roles "
-            "in short-term funding dynamics."
-        ),
-        page_path="pages/01_Repo.py",
-        link_label="🔍 Analyze Primary Dealer Repo Markets",
-        icon="🔄",
-        gradient_class="gradient-repo",
-        badge_text="Market Data"
-    )
-
-with col2:
-    gradient_project_card(
-    title="U.S. Repo Market Structure",
-    tagline="OFR Repo Data • Tri-party, DVP, GCF analysis",
-    description=(
-        "Explore the structure of the U.S. repo market using official Office of Financial Research (OFR) data. "
-        "Track transaction volumes across Tri-party, DVP, and GCF segments, with detailed breakdowns by tenor "
-        "and collateral where available."
-    ),
-    page_path="pages/01_Repo2.py",
-    link_label="🔍 Explore Repo Markets",
-    icon="♻️",
-    gradient_class="gradient-repo",
-    badge_text="OFR Data"
+scenario_card(
+    title="Federal Reserve Operations",
+    tagline="QE • OMO • Repo • Reserve Management",
+    description="Explore how the Fed creates reserves through open market operations, "
+                "quantitative easing, and repo facilities. Step-by-step T-account walkthroughs.",
+    icon="🏛️",
+    gradient_class="gradient-fed",
+    badge_text="FED",
+    page_path="pages/01_fed.py",
+    btn_key="btn_fed",
 )
 
-
-
-
-col1, col2 = st.columns(2, gap="large")
-
-with col1:
-    gradient_project_card(
-        title="FDIC Bank Reserves Distribution",
-        tagline="FDIC Call Reports • Bank-level reserve holdings",
-        description=(
-            "Measure reserve balances across FDIC-insured banks using Call Report items. "
-            "Uses CHFRB (Balances due from Federal Reserve Banks) when available and "
-            "falls back to CHBALI (Interest-bearing balances) when needed. "
-          
-        ),
-        page_path="pages/01_FDIC.py",
-        link_label="🔍 Explore FDIC Reserves",
-        icon="🏦",
-        gradient_class="gradient-fdic",
-        badge_text="Regulatory Data"
-    )
-
-with col2:
-    gradient_project_card(
-        title="Money Market Reference Rates",
-        tagline="EFFR, OBFR, SOFR, BGCR, TGCR • NY Fed reference rates",
-        description=(
-            "Track the latest levels and historical trends of key money market rates. Features "
-            "7-day and YTD views with user-selectable series and SOFR-centered design for "
-            "clean rate comparisons and spread analysis."
-        ),
-        page_path="pages/01_Interest.py",
-        link_label="🔍 Monitor Interest Rates",
-        icon="📈",
-        gradient_class="gradient-rates",
-        badge_text="Live Rates"
-    )
-
-# Treasury & Fiscal Section
+# ── TREASURY ──────────────────────────────────────────────────────────────────
 st.markdown("""
     <div class="category-header">
-        <h2 class="category-title">🏛️ Treasury Operations & Fiscal Analytics</h2>
-        <p class="category-subtitle">Daily Treasury operations, cash flows, and fiscal position monitoring</p>
+        <h2 class="category-title">💰 Treasury Operations</h2>
+        <p class="category-subtitle">Bond issuance, TGA movements, and reserve effects</p>
     </div>
-    """, unsafe_allow_html=True)
+""", unsafe_allow_html=True)
 
-col1, col2 = st.columns(2, gap="large")
+scenario_card(
+    title="Treasury Operations",
+    tagline="Bond Issuance • TGA • Reserve Impact",
+    description="See how Treasury bond issuance drains reserves and how government spending "
+                "injects them back. Follow the TGA balance through each transaction.",
+    icon="💰",
+    gradient_class="gradient-treasury",
+    badge_text="Treasury",
+    page_path="pages/02_treasury.py",
+    btn_key="btn_treasury",
+)
 
-with col1:
-    gradient_project_card(
-        title="Treasury General Account (TGA) Cash Position",
-        tagline="Daily Treasury Statement • Operating cash balance tracking",
-        description=(
-            "Monitor daily changes in the Treasury General Account with detailed cash position "
-            "statements. Features annual trend analysis, liquidity impact assessments, and "
-            "historical context for understanding Treasury operations."
-        ),
-        page_path="pages/01_TGA.py",
-        link_label="🔍 Track TGA Position",
-        icon="🏛️",
-        gradient_class="gradient-tga",
-        badge_text="Daily Updates"
-    )
-
-with col2:
-    gradient_project_card(
-        title="Public Balance & Cash Flows",
-        tagline="Daily Treasury Statement • Receipts, expenditures & debt operations",
-        description=(
-            "Comprehensive decomposition of daily Treasury inflows and outflows including tax "
-            "receipts, expenditures, new issuance, and redemptions. Monitor top-10 categories "
-            "in receipts and expenditures with trend analysis and seasonal adjustments."
-        ),
-        page_path="pages/01_PublicBalance.py",
-        link_label="🔍 Analyze Public Balance",
-        icon="📊",
-        gradient_class="gradient-balance",
-        badge_text="Cash Flows"
-    )
-
-# --- Second row (Yield Curve) ---
-st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True)
-
-col_y1, col_y2 = st.columns(2, gap="large")
-
-with col_y1:
-    gradient_project_card(
-        title="U.S. Treasury Yield Curve & Spreads",
-        tagline="Daily Treasury Yield Curve • Term structure ",
-        description=(
-            "Analyze the U.S. Treasury yield curve using official Treasury data. Track "
-            "yield curve shifts, term-structure dynamics, and key recession indicators "
-            "such as the 10Y–3M spread with transparent, auditable methodology."
-        ),
-        page_path="pages/01_Yield.py",
-        link_label="📈 View Yield Curve",
-        icon="📈",
-        gradient_class="gradient-yield",
-        badge_text="Yield Curve"
-    )
-
-with col_y2:
-    st.empty()  # reserved for future module
-
-    
-
-# Eurodollar Section (moved to bottom)
+# ── BANKS ─────────────────────────────────────────────────────────────────────
 st.markdown("""
     <div class="category-header">
-        <h2 class="category-title">🌍 Eurodollar</h2>
-        <p class="category-subtitle">Global USD credit, offshore funding, and BIS global liquidity</p>
+        <h2 class="category-title">🏦 Banking System</h2>
+        <p class="category-subtitle">Credit creation, reserve transfers, and deposit mechanics</p>
     </div>
-    """, unsafe_allow_html=True)
+""", unsafe_allow_html=True)
 
-col1, col2 = st.columns(2, gap="large")
+scenario_card(
+    title="Banking System",
+    tagline="Credit Creation • Reserve Transfer • Deposits",
+    description="Understand how banks create money through lending, how reserves move "
+                "between institutions, and what really happens on both sides of the balance sheet.",
+    icon="🏦",
+    gradient_class="gradient-banks",
+    badge_text="Banks",
+    page_path="pages/03_banks.py",
+    btn_key="btn_banks",
+)
 
-with col1:
-    gradient_project_card(
-        title="Eurodollar Market Evolution",
-        tagline="BIS Global Liquidity Indicators • USD credit analysis",
-        description=(
-            "Track the evolution of the global Eurodollar market from 2000 to present. Analyze "
-            "total credit, debt securities, and loans with YoY views, crisis period shading, "
-            "and Fed policy cycle context for comprehensive market understanding."
-        ),
-        page_path="pages/01_Eurodollar.py",
-        link_label="🔍 Explore Eurodollar Market",
-        icon="🌍",
-        gradient_class="gradient-eurodollar",
-        badge_text="Global Data"
-    )
+# ── COMBINED ──────────────────────────────────────────────────────────────────
+st.markdown("""
+    <div class="category-header">
+        <h2 class="category-title">🔀 Combined Scenarios</h2>
+        <p class="category-subtitle">FED + Treasury + Banks interactions and net effects</p>
+    </div>
+""", unsafe_allow_html=True)
 
-with col2:
-    st.empty()
+scenario_card(
+    title="Combined Scenarios",
+    tagline="FED + Treasury + Banks • Net Reserve Effects",
+    description="What happens when QE and bond issuance occur simultaneously? "
+                "Explore how the three actors interact and offset each other.",
+    icon="⚡",
+    gradient_class="gradient-karma",
+    badge_text="Combined",
+    page_path="pages/04_karma.py",
+    btn_key="btn_karma",
+)
 
-
-
-# Enhanced Footer
+# ── Footer ────────────────────────────────────────────────────────────────────
 st.markdown("""
     <div class="footer">
-        <h3 style="margin-top: 0;">About Veridelisi Analytics</h3>
+        <h3 style="margin-top: 0;">About MoneySimulator</h3>
         <p style="margin-bottom: 1.5rem;">
-            Professional-grade financial market analytics and Federal Reserve operations monitoring. 
-            Built for researchers, analysts, and policymakers who need deep insights into monetary policy implementation.
+            An educational simulation platform visualizing Federal Reserve, Treasury, 
+            and banking system operations through accounting entries and flow diagrams.
         </p>
         <div style="border-top: 1px solid #475569; padding-top: 1.5rem; margin-top: 1.5rem;">
-    <a href="https://veridelisi.substack.com/">📰 Veri Delisi Substack</a><br>
-    <span style="color: #94a3b8;">Created by</span> 
-    <strong>Engin Yılmaz</strong> • 
-    <span style="color: #94a3b8;">Amherst • September 2025</span>
-</div>
+            <a href="https://veridelisi.substack.com/">📰 Veri Delisi Substack</a><br>
+            <span style="color: #94a3b8;">Created by</span>
+            <strong>Engin Yılmaz</strong> •
+            <span style="color: #94a3b8;">2025</span>
+        </div>
     </div>
-    """, unsafe_allow_html=True)
+""", unsafe_allow_html=True)
