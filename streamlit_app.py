@@ -36,9 +36,9 @@ section[data-testid="stSidebar"][aria-expanded="true"]{display: none;}
 .stat-pill-label { font-size: 10px; color: #6b6b6b; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
 
 /* ── Section header ── */
-.section-head { margin: 1.8rem 0 0.8rem 0; padding-left: 12px; border-left: 3px solid #1E1B4B; }
-.section-title { font-size: 1.1rem; font-weight: 800; color: #0f172a; margin: 0; }
-.section-sub   { font-size: 0.82rem; color: #475569; margin: 2px 0 0 0; }
+.section-title { font-size: 1.3rem; font-weight: 800; color: #0f172a; margin: 0; }
+.section-sub   { font-size: 0.92rem; color: #475569; margin: 3px 0 0 0; }
+.section-head  { margin: 2rem 0 1rem 0; padding-left: 14px; border-left: 4px solid #1E1B4B; }
 .sh-fed      { border-left-color: #185FA5; }
 .sh-treasury { border-left-color: #3B6D11; }
 .sh-banks    { border-left-color: #92400E; }
