@@ -37,8 +37,8 @@ section[data-testid="stSidebar"][aria-expanded="true"]{display: none;}
 
 /* ── Section header ── */
 .section-head { margin: 1.8rem 0 0.8rem 0; padding-left: 12px; border-left: 3px solid #1E1B4B; }
-.section-title { font-size: 1rem; font-weight: 700; color: #1a1a1a; margin: 0; }
-.section-sub   { font-size: 0.78rem; color: #6b6b6b; margin: 2px 0 0 0; }
+.section-title { font-size: 1.1rem; font-weight: 800; color: #0f172a; margin: 0; }
+.section-sub   { font-size: 0.82rem; color: #475569; margin: 2px 0 0 0; }
 .sh-fed      { border-left-color: #185FA5; }
 .sh-treasury { border-left-color: #3B6D11; }
 .sh-banks    { border-left-color: #92400E; }
