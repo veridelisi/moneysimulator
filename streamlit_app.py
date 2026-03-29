@@ -21,30 +21,28 @@ section[data-testid="stSidebar"][aria-expanded="true"]{display: none;}
     text-align: center;
     margin-bottom: 1.2rem;
 }
-.hero-title  { font-size: 2.2rem; font-weight: 800; color: white; margin-bottom: 0.4rem; }
-.hero-sub    { font-size: 1rem; color: rgba(255,255,255,0.65); font-weight: 400; margin-bottom: 0.8rem; }
-.hero-desc   { font-size: 0.88rem; color: rgba(255,255,255,0.5); line-height: 1.6; max-width: 500px; margin: 0 auto; }
+.hero-title { font-size: 2.2rem; font-weight: 800; color: white; margin-bottom: 0.4rem; }
+.hero-sub   { font-size: 1rem; color: rgba(255,255,255,0.65); font-weight: 400; margin-bottom: 0.8rem; }
+.hero-desc  { font-size: 0.88rem; color: rgba(255,255,255,0.5); line-height: 1.6; max-width: 500px; margin: 0 auto; }
 
 /* ── Stat pills ── */
-.stat-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.2rem; }
 .stat-pill {
     background: white;
     border: 0.5px solid rgba(0,0,0,0.12);
     border-radius: 8px;
     padding: 10px 14px;
-    flex: 1; min-width: 100px;
 }
 .stat-pill-val   { font-size: 1.5rem; font-weight: 700; color: #1a1a1a; }
 .stat-pill-label { font-size: 10px; color: #6b6b6b; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
 
 /* ── Section header ── */
-.section-head {
-    margin: 1.8rem 0 0.8rem 0;
-    border-left: 3px solid #1E1B4B;
-    padding-left: 12px;
-}
+.section-head { margin: 1.8rem 0 0.8rem 0; padding-left: 12px; border-left: 3px solid #1E1B4B; }
 .section-title { font-size: 1rem; font-weight: 700; color: #1a1a1a; margin: 0; }
 .section-sub   { font-size: 0.78rem; color: #6b6b6b; margin: 2px 0 0 0; }
+.sh-fed      { border-left-color: #185FA5; }
+.sh-treasury { border-left-color: #3B6D11; }
+.sh-banks    { border-left-color: #92400E; }
+.sh-combined { border-left-color: #5B21B6; }
 
 /* ── Scenario card ── */
 .sc-card {
@@ -53,45 +51,54 @@ section[data-testid="stSidebar"][aria-expanded="true"]{display: none;}
     border-radius: 12px;
     overflow: hidden;
     margin-bottom: 8px;
-    transition: box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
-.sc-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); }
 
-.sc-card-top {
-    padding: 14px 14px 10px 14px;
+/* Renkli üst kısım */
+.sc-card-header {
+    padding: 14px 14px 12px 14px;
+    position: relative;
 }
+.sc-card-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.12);
+}
+.ch-fed      { background: linear-gradient(135deg, #1e3a5f 0%, #2d5a9e 100%); }
+.ch-treasury { background: linear-gradient(135deg, #047857 0%, #10b981 100%); }
+.ch-banks    { background: linear-gradient(135deg, #92400E 0%, #d97706 100%); }
+.ch-combined { background: linear-gradient(135deg, #5B21B6 0%, #8b5cf6 100%); }
+
 .sc-badge {
     display: inline-block;
+    background: rgba(255,255,255,0.25);
+    color: white;
     font-size: 9px; font-weight: 700;
     padding: 2px 9px; border-radius: 20px;
     text-transform: uppercase; letter-spacing: 0.6px;
-    margin-bottom: 6px;
+    border: 1px solid rgba(255,255,255,0.3);
+    margin-bottom: 8px;
+    position: relative; z-index: 1;
 }
-.badge-fed      { background: #E6F1FB; color: #185FA5; }
-.badge-treasury { background: #EAF3DE; color: #3B6D11; }
-.badge-banks    { background: #FEF3C7; color: #92400E; }
-.badge-combined { background: #EDE9FE; color: #5B21B6; }
-
-.sc-icon  { font-size: 1.6rem; display: block; margin-bottom: 4px; }
-.sc-title { font-size: 0.95rem; font-weight: 700; color: #1a1a1a; margin: 0 0 4px 0; line-height: 1.3; }
-.sc-desc  { font-size: 0.78rem; color: #6b6b6b; line-height: 1.5; margin: 0; }
-
-.sc-card-bottom {
-    border-top: 0.5px solid rgba(0,0,0,0.08);
-    padding: 0;
+.sc-icon  {
+    font-size: 1.8rem; display: block; margin-bottom: 4px;
+    position: relative; z-index: 1;
+}
+.sc-title-white {
+    font-size: 0.95rem; font-weight: 700; color: white;
+    margin: 0; line-height: 1.3;
+    position: relative; z-index: 1;
 }
 
-/* ── Color accents per section ── */
-.acc-fed      { border-left: 3px solid #185FA5; }
-.acc-treasury { border-left: 3px solid #3B6D11; }
-.acc-banks    { border-left: 3px solid #92400E; }
-.acc-combined { border-left: 3px solid #5B21B6; }
-
-/* section head accent */
-.sh-fed      { border-left-color: #185FA5; }
-.sh-treasury { border-left-color: #3B6D11; }
-.sh-banks    { border-left-color: #92400E; }
-.sh-combined { border-left-color: #5B21B6; }
+/* Beyaz alt kısım */
+.sc-card-body {
+    padding: 10px 14px 6px 14px;
+    flex: 1;
+}
+.sc-desc { font-size: 0.78rem; color: #6b6b6b; line-height: 1.5; margin: 0; }
 
 /* ── Footer ── */
 .footer {
@@ -137,14 +144,16 @@ for col, val, label in [
         </div>""", unsafe_allow_html=True)
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
-def sc_card(col, icon, badge_cls, badge_txt, title, desc, accent_cls, page, btn_key):
+def sc_card(col, icon, badge, title, desc, header_cls, page, btn_key):
     with col:
         st.markdown(f"""
-        <div class="sc-card {accent_cls}">
-            <div class="sc-card-top">
-                <span class="sc-badge {badge_cls}">{badge_txt}</span>
+        <div class="sc-card">
+            <div class="sc-card-header {header_cls}">
+                <span class="sc-badge">{badge}</span>
                 <span class="sc-icon">{icon}</span>
-                <p class="sc-title">{title}</p>
+                <p class="sc-title-white">{title}</p>
+            </div>
+            <div class="sc-card-body">
                 <p class="sc-desc">{desc}</p>
             </div>
         </div>
@@ -159,12 +168,12 @@ def section(title, sub, accent_cls):
         <div class="section-sub">{sub}</div>
     </div>""", unsafe_allow_html=True)
 
-def render_rows(rows, badge_cls, accent_cls, page):
+def render_rows(rows, header_cls, page):
     for row in rows:
         cols = st.columns(4, gap="small")
         for i, c in enumerate(row):
-            sc_card(cols[i], c["icon"], badge_cls, c["badge"],
-                    c["title"], c["desc"], accent_cls, page, c["key"])
+            sc_card(cols[i], c["icon"], c["badge"], c["title"],
+                    c["desc"], header_cls, page, c["key"])
         st.markdown("<div style='height:4px'></div>", unsafe_allow_html=True)
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -236,24 +245,20 @@ COMBINED = [
 # RENDER
 # ══════════════════════════════════════════════════════════════════════════════
 section("🏛️ Federal Reserve Operations",
-        "Open market operations, QE, repo, and reserve management",
-        "sh-fed")
-render_rows(FED, "badge-fed", "acc-fed", "pages/01_fed.py")
+        "Open market operations, QE, repo, and reserve management", "sh-fed")
+render_rows(FED, "ch-fed", "pages/01_fed.py")
 
 section("💰 Treasury Operations",
-        "Bond issuance, TGA movements, and reserve effects",
-        "sh-treasury")
-render_rows(TREASURY, "badge-treasury", "acc-treasury", "pages/02_treasury.py")
+        "Bond issuance, TGA movements, and reserve effects", "sh-treasury")
+render_rows(TREASURY, "ch-treasury", "pages/02_treasury.py")
 
 section("🏦 Banking System",
-        "Credit creation, reserve transfers, and deposit mechanics",
-        "sh-banks")
-render_rows(BANKS, "badge-banks", "acc-banks", "pages/03_banks.py")
+        "Credit creation, reserve transfers, and deposit mechanics", "sh-banks")
+render_rows(BANKS, "ch-banks", "pages/03_banks.py")
 
 section("🔀 Combined Scenarios",
-        "FED + Treasury + Banks interactions and net effects",
-        "sh-combined")
-render_rows(COMBINED, "badge-combined", "acc-combined", "pages/04_karma.py")
+        "FED + Treasury + Banks interactions and net effects", "sh-combined")
+render_rows(COMBINED, "ch-combined", "pages/04_karma.py")
 
 # ── Footer ────────────────────────────────────────────────────────────────────
 st.markdown("""
@@ -264,6 +269,6 @@ st.markdown("""
         and banking system operations through accounting entries and flow diagrams.
     </div>
     <a href="https://veridelisi.substack.com/">📰 Veri Delisi Substack</a>
-    <div class="footer-by">Created by <strong>Engin Yılmaz</strong> • 2026</div>
+    <div class="footer-by">Created by <strong>Engin Yılmaz</strong> • 2025</div>
 </div>
 """, unsafe_allow_html=True)
