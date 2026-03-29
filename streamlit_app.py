@@ -8,7 +8,7 @@ st.markdown("""
         section[data-testid="stSidebar"][aria-expanded="true"]{display: none;}
 
         .hero-container {
-            background: linear-gradient(135deg, #e8eef7 0%, #dbeafe 100%);
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
             padding: 3rem 2rem;
             border-radius: 20px;
             color: white;
