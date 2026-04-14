@@ -247,7 +247,7 @@ COMBINED = [
 
 section("🏦 Banking System",
         "Credit creation, reserve transfers, and deposit mechanics", "sh-banks")
-render_rows(BANKS, "ch-banks", "pages/03_banks.py")
+render_rows(BANKS, "ch-banks", "pages/03_Banks.py")
 
 section("🏛️ Federal Reserve Operations",
         "Open market operations, QE, repo, and reserve management", "sh-fed")
