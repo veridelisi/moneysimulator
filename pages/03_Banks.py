@@ -128,6 +128,11 @@ html, body, [class*="css"], .stApp {
     letter-spacing:0.5px;
     margin-bottom:10px;
 }
+.bsheet-panel-grid {
+    display:grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap:12px;
+}
 .bsheet-stage-title {
     font-size:11px;
     font-weight:800;
@@ -439,10 +444,11 @@ def render_step_balance_sheets(state, involved_entities):
     if not involved_entities:
         return
 
-    st.markdown('<div class="bsheet-panel"><div class="bsheet-panel-grid">', unsafe_allow_html=True)
-    for ek in involved_entities:
-        st.markdown(bsheet_html(ek, state, True), unsafe_allow_html=True)
-    st.markdown('</div></div>', unsafe_allow_html=True)
+    blocks = "".join(bsheet_html(ek, state, True) for ek in involved_entities)
+    st.markdown(
+        f'<div class="bsheet-panel"><div class="bsheet-panel-grid">{blocks}</div></div>',
+        unsafe_allow_html=True
+    )
 
 
 def ms_chart(history, height=240):
@@ -684,7 +690,12 @@ with col_main:
 
     else:
         # ── SIMULATION MODE ──
-        if not already_confirmed:
+        if already_confirmed:
+            render_step_balance_sheets(
+                st.session_state[ss("ledger")],
+                sc["involved"]
+            )
+        else:
             st.markdown(
                 f'<div class="choice-prompt">'
                 f'<div class="choice-prompt-label">🎯 Make Your Choice</div>'
@@ -696,34 +707,42 @@ with col_main:
             for idx, opt in enumerate(sc["sim_opts"]):
                 with btn_cols[idx]:
                     is_sel = st.session_state[ss("chosen")].get(step_i) == opt
-                    if st.button(f"${opt}", key=f"cc_opt_{step_i}_{opt}",
-                                 type="primary" if is_sel else "secondary",
-                                 use_container_width=True):
+                    if st.button(
+                        f"${opt}",
+                        key=f"cc_opt_{step_i}_{opt}",
+                        type="primary" if is_sel else "secondary",
+                        use_container_width=True
+                    ):
                         st.session_state[ss("chosen")][step_i] = opt
                         st.rerun()
 
             chosen_amt = st.session_state[ss("chosen")].get(step_i)
             st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
+
             if chosen_amt is not None:
-                if st.button(f"✓ Confirm ${chosen_amt} and Apply", type="primary", use_container_width=True):
+                if st.button(
+                    f"✓ Confirm ${chosen_amt} and Apply",
+                    key=f"cc_confirm_{step_i}",
+                    type="primary",
+                    use_container_width=True
+                ):
                     txs = build_transactions(sc["id"], chosen_amt)
                     new_ledger = apply_tx(st.session_state[ss("ledger")], txs)
+
                     st.session_state[ss("ledger")] = new_ledger
-                    bm, cm, tot = compute_ms(new_ledger)
-                    st.session_state[ss("ms_history")].append({"label":f"Step {sc['id']}","bank":bm,"cash":cm,"total":tot})
                     st.session_state[ss("chosen")][step_i] = chosen_amt
                     st.session_state[ss("confirmed")].add(step_i)
+
+                    bm, cm, tot = compute_ms(new_ledger)
+                    st.session_state[ss("ms_history")].append(
+                        {"label": f"Step {sc['id']}", "bank": bm, "cash": cm, "total": tot}
+                    )
                     st.rerun()
             else:
                 st.markdown(
                     '<div style="text-align:center;color:#9CA3AF;font-size:12px;padding:8px 0;">👆 Pick an amount above to continue</div>',
                     unsafe_allow_html=True
                 )
-        else:
-            render_step_balance_sheets(
-                st.session_state[ss("ledger")],
-                sc["involved"]
-            )
 
     # ── Navigation ────────────────────────────────────────────────────────────
     st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
