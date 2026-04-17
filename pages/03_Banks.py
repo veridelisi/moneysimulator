@@ -9,6 +9,18 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+
+# ---------------------------- STOP Expanded -----------------
+st.markdown(
+    """
+<style>
+    [data-testid="stSidebarNav"] {display: none;}
+    section[data-testid="stSidebar"][aria-expanded="true"]{display: none;}
+</style>
+""",
+    unsafe_allow_html=True,
+)
+
 # ─── TOP NAV ──────────────────────────────────────────────────────────────────
 cols = st.columns(5)
 with cols[0]:
@@ -21,18 +33,6 @@ with cols[3]:
     st.page_link("pages/03_banks.py", label="🏦 Banks")
 with cols[4]:
     st.page_link("pages/04_karma.py", label="🔀 Combined")
-# ---------------------------- STOP Expanded -----------------
-st.markdown(
-    """
-<style>
-    [data-testid="stSidebarNav"] {display: none;}
-    section[data-testid="stSidebar"][aria-expanded="true"]{display: none;}
-</style>
-""",
-    unsafe_allow_html=True,
-)
-
-
 
 # ─── CSS ──────────────────────────────────────────────────────────────────────
 st.markdown("""
