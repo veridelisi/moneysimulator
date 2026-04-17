@@ -434,101 +434,15 @@ def bsheet_html(ek, state, active):
             f'</div><div class="bsheet-total"><span class="t-a">${ta}</span><span class="t-l">{tl_str}</span></div></div>')
 
 
-def totals_for_entity(entity_state):
-    ta = sum(entity_state["assets"].values())
-    tl = sum(entity_state["liabilities"].values())
-    return ta, tl
 
-def account_changes(before, after):
-    rows = []
-
-    keys_a = sorted(set(before["assets"].keys()) | set(after["assets"].keys()))
-    for k in keys_a:
-        diff = after["assets"].get(k, 0) - before["assets"].get(k, 0)
-        if diff != 0:
-            rows.append((f"Asset · {fname(k)}", diff))
-
-    keys_l = sorted(set(before["liabilities"].keys()) | set(after["liabilities"].keys()))
-    for k in keys_l:
-        diff = after["liabilities"].get(k, 0) - before["liabilities"].get(k, 0)
-        if diff != 0:
-            rows.append((f"Liab · {fname(k)}", diff))
-
-    return rows
-
-def delta_chip(diff):
-    if diff > 0:
-        return f'<span class="delta-chip delta-up">▲ ${diff}</span>'
-    elif diff < 0:
-        return f'<span class="delta-chip delta-down">▼ ${abs(diff)}</span>'
-    return f'<span class="delta-chip delta-flat">— $0</span>'
-
-def entity_delta_html(entity_key, before_state, after_state):
-    before_e = before_state[entity_key]
-    after_e = after_state[entity_key]
-    changes = account_changes(before_e, after_e)
-
-    if not changes:
-        return (
-            f'<div class="entity-delta-box">'
-            f'<div class="entity-delta-title">{ENTITY_DEFS[entity_key]["label"]} · Net Changes</div>'
-            f'<div class="entity-delta-row"><span class="entity-delta-name">No account change</span>'
-            f'<span class="entity-delta-val flat">—</span></div></div>'
-        )
-
-    rows = []
-    for name, diff in changes:
-        cls = "up" if diff > 0 else "down"
-        sign = "+" if diff > 0 else "−"
-        rows.append(
-            f'<div class="entity-delta-row">'
-            f'<span class="entity-delta-name">{name}</span>'
-            f'<span class="entity-delta-val {cls}">{sign}${abs(diff)}</span>'
-            f'</div>'
-        )
-
-    return (
-        f'<div class="entity-delta-box">'
-        f'<div class="entity-delta-title">{ENTITY_DEFS[entity_key]["label"]} · Net Changes</div>'
-        f'{"".join(rows)}'
-        f'</div>'
-    )
-
-def render_balance_sheet_panel(before_state, after_state, involved_entities, title="Balance Sheet View"):
+def render_step_balance_sheets(state, involved_entities):
     if not involved_entities:
         return
 
-    st.markdown('<div class="bsheet-panel">', unsafe_allow_html=True)
-    st.markdown(
-        f'<div class="bsheet-panel-title">{title}</div>',
-        unsafe_allow_html=True
-    )
-
+    st.markdown('<div class="bsheet-panel"><div class="bsheet-panel-grid">', unsafe_allow_html=True)
     for ek in involved_entities:
-        before_e = before_state[ek]
-        after_e = after_state[ek]
-        bta, btl = totals_for_entity(before_e)
-        ata, atl = totals_for_entity(after_e)
-
-        c1, c2 = st.columns(2)
-        with c1:
-            st.markdown(
-                f'<div class="bsheet-stage-title">Before {delta_chip(0)}</div>',
-                unsafe_allow_html=True
-            )
-            st.markdown(bsheet_html(ek, before_state, True), unsafe_allow_html=True)
-
-        with c2:
-            net_diff = (ata + atl) - (bta + btl)
-            st.markdown(
-                f'<div class="bsheet-stage-title">After {delta_chip(net_diff)}</div>',
-                unsafe_allow_html=True
-            )
-            st.markdown(bsheet_html(ek, after_state, True), unsafe_allow_html=True)
-
-        st.markdown(entity_delta_html(ek, before_state, after_state), unsafe_allow_html=True)
-
-    st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown(bsheet_html(ek, state, True), unsafe_allow_html=True)
+    st.markdown('</div></div>', unsafe_allow_html=True)
 
 
 def ms_chart(history, height=240):
@@ -681,10 +595,6 @@ with st.sidebar:
         unsafe_allow_html=True
     )
 
-    st.markdown('<div style="font-size:10px;text-transform:uppercase;letter-spacing:0.5px;color:#a0a0a0;margin:8px 0 4px 0;">Balance Sheets</div>', unsafe_allow_html=True)
-    active_entities = sc["involved"] if step_i in st.session_state[ss("confirmed")] else []
-    for ek in ENTITY_ORDER:
-        st.markdown(bsheet_html(ek, st.session_state[ss("ledger")], ek in active_entities), unsafe_allow_html=True)
 
     st.markdown("---")
     c1, c2 = st.columns(2)
@@ -735,22 +645,6 @@ col_main, col_chart = st.columns([3, 2])
 with col_main:
     already_confirmed = step_i in st.session_state[ss("confirmed")]
 
-    preview_amt = None
-    if sc["choice_type"] == "none":
-        preview_state = st.session_state[ss("ledger")]
-    else:
-        if IS_TRAINING:
-            preview_amt = sc["training_amt"]
-        else:
-            preview_amt = st.session_state[ss("chosen")].get(step_i)
-
-        if preview_amt is not None:
-            preview_state = apply_tx(
-                st.session_state[ss("ledger")],
-                build_transactions(sc["id"], preview_amt)
-            )
-        else:
-            preview_state = st.session_state[ss("ledger")]
 
     if sc["choice_type"] == "none":
         # Auto-confirm
@@ -773,12 +667,6 @@ with col_main:
                     f'<div class="flow-strip"><div class="flow-label">Transaction Flow</div>{flow_html(flow_nodes)}</div>',
                     unsafe_allow_html=True
                 )
-            render_balance_sheet_panel(
-                st.session_state[ss("ledger")],
-                preview_state,
-                sc["involved"],
-                title="Preview · Balance Sheets After This Step"
-            )
             if st.button(f"✓ Apply ${amt} and Continue", type="primary", use_container_width=True):
                 txs = build_transactions(sc["id"], amt)
                 new_ledger = apply_tx(st.session_state[ss("ledger")], txs)
@@ -789,20 +677,9 @@ with col_main:
                 st.session_state[ss("chosen")][step_i] = amt
                 st.rerun()
         else:
-            amt = st.session_state[ss("chosen")].get(step_i, sc["training_amt"])
-            st.markdown(f'<span class="chosen-pill">✓ Applied: ${amt}</span>', unsafe_allow_html=True)
-            st.markdown(f'<div class="insight-bar">💡 {sc["insight"]}</div>', unsafe_allow_html=True)
-            flow_nodes = build_flow(sc["id"], amt)
-            if flow_nodes:
-                st.markdown(
-                    f'<div class="flow-strip"><div class="flow-label">Transaction Flow</div>{flow_html(flow_nodes)}</div>',
-                    unsafe_allow_html=True
-                )
-            render_balance_sheet_panel(
+            render_step_balance_sheets(
                 st.session_state[ss("ledger")],
-                st.session_state[ss("ledger")],
-                sc["involved"],
-                title="Applied · Current Balance Sheets"
+                sc["involved"]
             )
 
     else:
@@ -828,25 +705,6 @@ with col_main:
             chosen_amt = st.session_state[ss("chosen")].get(step_i)
             st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
             if chosen_amt is not None:
-                preview_state = apply_tx(
-                    st.session_state[ss("ledger")],
-                    build_transactions(sc["id"], chosen_amt)
-                )
-
-                flow_nodes = build_flow(sc["id"], chosen_amt)
-                if flow_nodes:
-                    st.markdown(
-                        f'<div class="flow-strip"><div class="flow-label">Preview Flow</div>{flow_html(flow_nodes)}</div>',
-                        unsafe_allow_html=True
-                    )
-
-                render_balance_sheet_panel(
-                    st.session_state[ss("ledger")],
-                    preview_state,
-                    sc["involved"],
-                    title="Preview · If You Confirm This Choice"
-                )
-
                 if st.button(f"✓ Confirm ${chosen_amt} and Apply", type="primary", use_container_width=True):
                     txs = build_transactions(sc["id"], chosen_amt)
                     new_ledger = apply_tx(st.session_state[ss("ledger")], txs)
@@ -861,20 +719,9 @@ with col_main:
                     unsafe_allow_html=True
                 )
         else:
-            chosen_amt = st.session_state[ss("chosen")][step_i]
-            st.markdown(f'<span class="chosen-pill">✓ You chose: ${chosen_amt}</span>', unsafe_allow_html=True)
-            flow_nodes = build_flow(sc["id"], chosen_amt)
-            if flow_nodes:
-                st.markdown(
-                    f'<div class="flow-strip"><div class="flow-label">Transaction Flow</div>{flow_html(flow_nodes)}</div>',
-                    unsafe_allow_html=True
-                )
-            st.markdown(f'<div class="insight-bar">💡 {sc["insight"]}</div>', unsafe_allow_html=True)
-            render_balance_sheet_panel(
+            render_step_balance_sheets(
                 st.session_state[ss("ledger")],
-                st.session_state[ss("ledger")],
-                sc["involved"],
-                title="Applied · Current Balance Sheets"
+                sc["involved"]
             )
 
     # ── Navigation ────────────────────────────────────────────────────────────
