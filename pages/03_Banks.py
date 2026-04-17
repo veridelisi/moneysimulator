@@ -112,6 +112,69 @@ html, body, [class*="css"], .stApp {
 .choice-prompt-sub   { font-size:11px; color:#B45309; }
 .chosen-pill { display:inline-block; background:#1E40AF; color:white; font-size:13px; font-weight:700; padding:4px 14px; border-radius:20px; margin-bottom:8px; }
 .complete-card { background:linear-gradient(135deg,#DCFCE7,#D1FAE5); border:1px solid #86EFAC; border-radius:14px; padding:28px 32px; text-align:center; margin-bottom:16px; }
+
+.bsheet-panel {
+    background:#ffffff;
+    border:0.5px solid rgba(0,0,0,0.10);
+    border-radius:12px;
+    padding:14px 16px;
+    margin-top:12px;
+}
+.bsheet-panel-title {
+    font-size:12px;
+    font-weight:800;
+    color:#1E1B4B;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    margin-bottom:10px;
+}
+.bsheet-stage-title {
+    font-size:11px;
+    font-weight:800;
+    color:#475569;
+    margin-bottom:8px;
+    text-transform:uppercase;
+    letter-spacing:0.4px;
+}
+.delta-chip {
+    display:inline-block;
+    font-size:10px;
+    font-weight:800;
+    border-radius:999px;
+    padding:3px 8px;
+    margin-left:6px;
+}
+.delta-up   { background:#DCFCE7; color:#166534; }
+.delta-down { background:#FEE2E2; color:#991B1B; }
+.delta-flat { background:#E5E7EB; color:#374151; }
+
+.entity-delta-box {
+    background:#fff;
+    border:1px dashed rgba(0,0,0,0.10);
+    border-radius:10px;
+    padding:10px 12px;
+    margin-top:10px;
+    margin-bottom:12px;
+}
+.entity-delta-title {
+    font-size:11px;
+    font-weight:800;
+    color:#334155;
+    margin-bottom:6px;
+    text-transform:uppercase;
+    letter-spacing:0.4px;
+}
+.entity-delta-row {
+    display:flex;
+    justify-content:space-between;
+    gap:8px;
+    font-size:11px;
+    padding:3px 0;
+}
+.entity-delta-name { color:#475569; }
+.entity-delta-val.up { color:#15803D; font-weight:800; }
+.entity-delta-val.down { color:#B91C1C; font-weight:800; }
+.entity-delta-val.flat { color:#6B7280; font-weight:700; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -370,6 +433,104 @@ def bsheet_html(ek, state, active):
             f'<div class="bsheet-col"><div class="col-title-l">Liabilities</div>{lr}</div>'
             f'</div><div class="bsheet-total"><span class="t-a">${ta}</span><span class="t-l">{tl_str}</span></div></div>')
 
+
+def totals_for_entity(entity_state):
+    ta = sum(entity_state["assets"].values())
+    tl = sum(entity_state["liabilities"].values())
+    return ta, tl
+
+def account_changes(before, after):
+    rows = []
+
+    keys_a = sorted(set(before["assets"].keys()) | set(after["assets"].keys()))
+    for k in keys_a:
+        diff = after["assets"].get(k, 0) - before["assets"].get(k, 0)
+        if diff != 0:
+            rows.append((f"Asset · {fname(k)}", diff))
+
+    keys_l = sorted(set(before["liabilities"].keys()) | set(after["liabilities"].keys()))
+    for k in keys_l:
+        diff = after["liabilities"].get(k, 0) - before["liabilities"].get(k, 0)
+        if diff != 0:
+            rows.append((f"Liab · {fname(k)}", diff))
+
+    return rows
+
+def delta_chip(diff):
+    if diff > 0:
+        return f'<span class="delta-chip delta-up">▲ ${diff}</span>'
+    elif diff < 0:
+        return f'<span class="delta-chip delta-down">▼ ${abs(diff)}</span>'
+    return f'<span class="delta-chip delta-flat">— $0</span>'
+
+def entity_delta_html(entity_key, before_state, after_state):
+    before_e = before_state[entity_key]
+    after_e = after_state[entity_key]
+    changes = account_changes(before_e, after_e)
+
+    if not changes:
+        return (
+            f'<div class="entity-delta-box">'
+            f'<div class="entity-delta-title">{ENTITY_DEFS[entity_key]["label"]} · Net Changes</div>'
+            f'<div class="entity-delta-row"><span class="entity-delta-name">No account change</span>'
+            f'<span class="entity-delta-val flat">—</span></div></div>'
+        )
+
+    rows = []
+    for name, diff in changes:
+        cls = "up" if diff > 0 else "down"
+        sign = "+" if diff > 0 else "−"
+        rows.append(
+            f'<div class="entity-delta-row">'
+            f'<span class="entity-delta-name">{name}</span>'
+            f'<span class="entity-delta-val {cls}">{sign}${abs(diff)}</span>'
+            f'</div>'
+        )
+
+    return (
+        f'<div class="entity-delta-box">'
+        f'<div class="entity-delta-title">{ENTITY_DEFS[entity_key]["label"]} · Net Changes</div>'
+        f'{"".join(rows)}'
+        f'</div>'
+    )
+
+def render_balance_sheet_panel(before_state, after_state, involved_entities, title="Balance Sheet View"):
+    if not involved_entities:
+        return
+
+    st.markdown('<div class="bsheet-panel">', unsafe_allow_html=True)
+    st.markdown(
+        f'<div class="bsheet-panel-title">{title}</div>',
+        unsafe_allow_html=True
+    )
+
+    for ek in involved_entities:
+        before_e = before_state[ek]
+        after_e = after_state[ek]
+        bta, btl = totals_for_entity(before_e)
+        ata, atl = totals_for_entity(after_e)
+
+        c1, c2 = st.columns(2)
+        with c1:
+            st.markdown(
+                f'<div class="bsheet-stage-title">Before {delta_chip(0)}</div>',
+                unsafe_allow_html=True
+            )
+            st.markdown(bsheet_html(ek, before_state, True), unsafe_allow_html=True)
+
+        with c2:
+            net_diff = (ata + atl) - (bta + btl)
+            st.markdown(
+                f'<div class="bsheet-stage-title">After {delta_chip(net_diff)}</div>',
+                unsafe_allow_html=True
+            )
+            st.markdown(bsheet_html(ek, after_state, True), unsafe_allow_html=True)
+
+        st.markdown(entity_delta_html(ek, before_state, after_state), unsafe_allow_html=True)
+
+    st.markdown('</div>', unsafe_allow_html=True)
+
+
 def ms_chart(history, height=240):
     labels = [d["label"] for d in history]
     fig = go.Figure()
@@ -574,6 +735,23 @@ col_main, col_chart = st.columns([3, 2])
 with col_main:
     already_confirmed = step_i in st.session_state[ss("confirmed")]
 
+    preview_amt = None
+    if sc["choice_type"] == "none":
+        preview_state = st.session_state[ss("ledger")]
+    else:
+        if IS_TRAINING:
+            preview_amt = sc["training_amt"]
+        else:
+            preview_amt = st.session_state[ss("chosen")].get(step_i)
+
+        if preview_amt is not None:
+            preview_state = apply_tx(
+                st.session_state[ss("ledger")],
+                build_transactions(sc["id"], preview_amt)
+            )
+        else:
+            preview_state = st.session_state[ss("ledger")]
+
     if sc["choice_type"] == "none":
         # Auto-confirm
         st.markdown(f'<div class="insight-bar">💡 {sc["insight"]}</div>', unsafe_allow_html=True)
@@ -595,6 +773,12 @@ with col_main:
                     f'<div class="flow-strip"><div class="flow-label">Transaction Flow</div>{flow_html(flow_nodes)}</div>',
                     unsafe_allow_html=True
                 )
+            render_balance_sheet_panel(
+                st.session_state[ss("ledger")],
+                preview_state,
+                sc["involved"],
+                title="Preview · Balance Sheets After This Step"
+            )
             if st.button(f"✓ Apply ${amt} and Continue", type="primary", use_container_width=True):
                 txs = build_transactions(sc["id"], amt)
                 new_ledger = apply_tx(st.session_state[ss("ledger")], txs)
@@ -614,6 +798,12 @@ with col_main:
                     f'<div class="flow-strip"><div class="flow-label">Transaction Flow</div>{flow_html(flow_nodes)}</div>',
                     unsafe_allow_html=True
                 )
+            render_balance_sheet_panel(
+                st.session_state[ss("ledger")],
+                st.session_state[ss("ledger")],
+                sc["involved"],
+                title="Applied · Current Balance Sheets"
+            )
 
     else:
         # ── SIMULATION MODE ──
@@ -638,6 +828,25 @@ with col_main:
             chosen_amt = st.session_state[ss("chosen")].get(step_i)
             st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
             if chosen_amt is not None:
+                preview_state = apply_tx(
+                    st.session_state[ss("ledger")],
+                    build_transactions(sc["id"], chosen_amt)
+                )
+
+                flow_nodes = build_flow(sc["id"], chosen_amt)
+                if flow_nodes:
+                    st.markdown(
+                        f'<div class="flow-strip"><div class="flow-label">Preview Flow</div>{flow_html(flow_nodes)}</div>',
+                        unsafe_allow_html=True
+                    )
+
+                render_balance_sheet_panel(
+                    st.session_state[ss("ledger")],
+                    preview_state,
+                    sc["involved"],
+                    title="Preview · If You Confirm This Choice"
+                )
+
                 if st.button(f"✓ Confirm ${chosen_amt} and Apply", type="primary", use_container_width=True):
                     txs = build_transactions(sc["id"], chosen_amt)
                     new_ledger = apply_tx(st.session_state[ss("ledger")], txs)
@@ -661,6 +870,12 @@ with col_main:
                     unsafe_allow_html=True
                 )
             st.markdown(f'<div class="insight-bar">💡 {sc["insight"]}</div>', unsafe_allow_html=True)
+            render_balance_sheet_panel(
+                st.session_state[ss("ledger")],
+                st.session_state[ss("ledger")],
+                sc["involved"],
+                title="Applied · Current Balance Sheets"
+            )
 
     # ── Navigation ────────────────────────────────────────────────────────────
     st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
