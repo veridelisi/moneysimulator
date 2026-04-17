@@ -472,6 +472,14 @@ step_i = st.session_state[ss("step")]
 sc     = SCENARIOS[min(step_i, len(SCENARIOS)-1)]
 IS_TRAINING = mode == "training"
 
+# ─── TOP NAV (when in mode) ───────────────────────────────────────────────────
+if mode is not None:
+    col_nav_home, col_nav_spacer = st.columns([1, 5])
+    with col_nav_home:
+        if st.button("🏠 Home", use_container_width=True, type="secondary"):
+            reset()
+            st.switch_page("streamlit_app.py")
+
 with st.sidebar:
     if st.button("← Back to Home", use_container_width=True):
         st.switch_page("streamlit_app.py")
