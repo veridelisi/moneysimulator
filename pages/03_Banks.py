@@ -30,17 +30,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-cols = st.columns((1, 1, 1, 1, 1), gap="small")
-with cols[0]:
-    st.page_link("streamlit_app.py", label="🏠 Home")
-with cols[1]:
-    st.page_link("pages/01_Fed.py", label="🏛️ FED")
-with cols[2]:
-    st.page_link("pages/02_Treasury.py", label="💰 Treasury")
-with cols[3]:
-    st.page_link("pages/03_Banks.py", label="🏦 Banks")
-with cols[4]:
-    st.page_link("pages/04_Karma.py", label="🔀 Combined")
+
 
 # ─── CSS ──────────────────────────────────────────────────────────────────────
 st.markdown("""
