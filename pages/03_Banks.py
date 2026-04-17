@@ -19,18 +19,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# ---------------------------- Top nav (your template) -----------------
-cols = st.columns(5)
-with cols[0]:
-    st.page_link("streamlit_app.py", label="🏠 Home")
-with cols[1]:
-    st.page_link("pages/01_Fed.py", label="🌍 Reserves")
-with cols[2]:
-    st.page_link("pages/02_Treasury.py", label="🏦 FDIC")
-with cols[3]:
-    st.page_link("pages/03_Banks.py", label="🔄 Repo")
-with cols[4]:
-    st.page_link("pages/04_Karma.py", label="♻️ Repo 2")
 
 
 # ─── CSS ──────────────────────────────────────────────────────────────────────
