@@ -711,6 +711,7 @@ with col_main:
                     st.session_state[ss("ledger")] = new_ledger
                     bm, cm, tot = compute_ms(new_ledger)
                     st.session_state[ss("ms_history")].append({"label":f"Step {sc['id']}","bank":bm,"cash":cm,"total":tot})
+                    st.session_state[ss("chosen")][step_i] = chosen_amt
                     st.session_state[ss("confirmed")].add(step_i)
                     st.rerun()
             else:
