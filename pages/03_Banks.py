@@ -26,13 +26,13 @@ cols = st.columns(5)
 with cols[0]:
     st.page_link("streamlit_app.py", label="🏠 Home")
 with cols[1]:
-    st.page_link("pages/01_fed.py", label="🏛️ FED")
+    st.page_link("pages/01_Fed.py", label="🏛️ FED")
 with cols[2]:
-    st.page_link("pages/02_treasury.py", label="💰 Treasury")
+    st.page_link("pages/02_Treasury.py", label="💰 Treasury")
 with cols[3]:
-    st.page_link("pages/03_banks.py", label="🏦 Banks")
+    st.page_link("pages/03_Banks.py", label="🏦 Banks")
 with cols[4]:
-    st.page_link("pages/04_karma.py", label="🔀 Combined")
+    st.page_link("pages/04_Karma.py", label="🔀 Combined")
 
 # ─── CSS ──────────────────────────────────────────────────────────────────────
 st.markdown("""
