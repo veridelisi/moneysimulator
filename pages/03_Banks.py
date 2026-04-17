@@ -8,6 +8,19 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
+
+# ─── TOP NAV ──────────────────────────────────────────────────────────────────
+cols = st.columns(5)
+with cols[0]:
+    st.page_link("streamlit_app.py", label="🏠 Home")
+with cols[1]:
+    st.page_link("pages/01_fed.py", label="🏛️ FED")
+with cols[2]:
+    st.page_link("pages/02_treasury.py", label="💰 Treasury")
+with cols[3]:
+    st.page_link("pages/03_banks.py", label="🏦 Banks")
+with cols[4]:
+    st.page_link("pages/04_karma.py", label="🔀 Combined")
 # ---------------------------- STOP Expanded -----------------
 st.markdown(
     """
