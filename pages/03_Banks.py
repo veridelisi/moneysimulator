@@ -476,9 +476,9 @@ IS_TRAINING = mode == "training"
 if mode is not None:
     col_nav_home, col_nav_spacer = st.columns([1, 5])
     with col_nav_home:
-        if st.button("🏠 Home", use_container_width=True, type="secondary"):
+        if st.button("← Back to Home", use_container_width=True, type="secondary"):
             reset()
-            st.switch_page("streamlit_app.py")
+            st.switch_page("03_Banks.py")
 
 with st.sidebar:
     if st.button("← Back to Home", use_container_width=True):
