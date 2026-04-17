@@ -22,7 +22,15 @@ st.markdown(
 )
 
 # ─── TOP NAV ──────────────────────────────────────────────────────────────────
-cols = st.columns(5)
+st.markdown("""
+<style>
+.nav-container { display: flex; gap: 0.5rem; justify-content: center; }
+</style>
+<div class="nav-container">
+</div>
+""", unsafe_allow_html=True)
+
+cols = st.columns((1, 1, 1, 1, 1), gap="small")
 with cols[0]:
     st.page_link("streamlit_app.py", label="🏠 Home")
 with cols[1]:
