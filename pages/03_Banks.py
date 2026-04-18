@@ -186,11 +186,7 @@ html, body, [class*="css"], .stApp {
 @media (max-width: 768px) {
     .block-container { padding-left: 1rem !important; padding-right: 1rem !important; }
     
-    /* Reorder columns on mobile - put chart first */
-    div[data-testid="stHorizontalBlock"] {
-        display: flex !important;
-        flex-direction: column-reverse !important;  
-    }
+
     
     .step-title { font-size:15px; }
     .step-desc { font-size:12px; }
