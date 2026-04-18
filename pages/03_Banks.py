@@ -760,9 +760,16 @@ with col_main:
                 st.rerun()
         else:
             render_step_balance_sheets(
-                st.session_state[ss("ledger")],
-                sc["involved"]
-            )
+            st.session_state[ss("ledger")],
+            sc["involved"]
+    )
+
+            if len(st.session_state[ss("ms_history")]) > 1:
+                    st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
+                    st.plotly_chart(
+                    ms_chart(st.session_state[ss("ms_history")]),
+                    use_container_width=True
+        )
 
     else:
         # ── SIMULATION MODE ──
@@ -822,17 +829,7 @@ with col_main:
 
 
 
-with col_chart:
-    if len(st.session_state[ss("ms_history")]) > 1:
-        st.plotly_chart(ms_chart(st.session_state[ss("ms_history")]), use_container_width=True)
-    else:
-        st.markdown(
-            '<div style="background:#f7f7f5;border:0.5px solid rgba(0,0,0,0.10);border-radius:10px;padding:40px;text-align:center;">'
-            '<div style="font-size:24px;">📊</div>'
-            '<div style="font-size:12px;color:#a0a0a0;margin-top:6px;">Money supply chart appears<br>as you complete steps</div>'
-            '</div>',
-            unsafe_allow_html=True
-        )
+
 # ── Navigation (Rendered Last for Mobile Layout) ────────────────────────────────
 st.markdown("<div style='height:12px'></div>", unsafe_allow_html=True)
 nav1, nav2 = st.columns(2)
