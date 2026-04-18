@@ -41,16 +41,6 @@ html, body, [class*="css"], .stApp {
 }
 .block-container { padding-top: 0.5rem !important; padding-bottom: 1rem !important; }
 
-/* Main content wrapper for responsive layout */
-.stColumns > div { display: contents; }
-@media (max-width: 768px) {
-    .step-container {
-        display: flex;
-        flex-direction: column;
-    }
-    .step-main { order: 2; }
-    .step-chart { order: 1; }
-}
 
 .sb-metric { background:white; border:0.5px solid rgba(0,0,0,0.12); border-radius:8px; padding:10px 12px; margin-bottom:7px; }
 .sb-metric-label { font-size:10px; color:#6b6b6b; text-transform:uppercase; letter-spacing:0.5px; }
@@ -219,6 +209,15 @@ html, body, [class*="css"], .stApp {
     .mode-card { padding:18px 20px; }
     .mode-title { font-size:16px; }
     .mode-sub { font-size:11px; }
+
+    .bsheet-head { padding:5px 8px; }
+    .bsheet-name { font-size:11px; }
+    .bsheet-active-badge { font-size:8px; padding:1px 6px; }
+    .bsheet-col { padding:6px 7px; }
+    .col-title-a, .col-title-l { font-size:8px; margin-bottom:3px; }
+    .bsheet-row { font-size:9px; gap:3px; }
+    .bsheet-row .bval { font-size:9px; }
+    .bsheet-total { font-size:9px; padding:4px 7px; }
 }
 
 @media (max-width: 480px) {
@@ -251,6 +250,13 @@ html, body, [class*="css"], .stApp {
     .mode-sub { font-size:10px; }
     
     .complete-card { padding:20px 24px; }
+
+    .bsheet-name { font-size:10px; }
+    .bsheet-col { padding:5px 6px; }
+    .col-title-a, .col-title-l { font-size:7px; }
+    .bsheet-row { font-size:8px; }
+    .bsheet-row .bval { font-size:8px; }
+    .bsheet-total { font-size:8px; }
 }
 
 </style>
