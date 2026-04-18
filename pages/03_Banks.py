@@ -41,6 +41,17 @@ html, body, [class*="css"], .stApp {
 }
 .block-container { padding-top: 0.5rem !important; padding-bottom: 1rem !important; }
 
+/* Main content wrapper for responsive layout */
+.stColumns > div { display: contents; }
+@media (max-width: 768px) {
+    .step-container {
+        display: flex;
+        flex-direction: column;
+    }
+    .step-main { order: 2; }
+    .step-chart { order: 1; }
+}
+
 .sb-metric { background:white; border:0.5px solid rgba(0,0,0,0.12); border-radius:8px; padding:10px 12px; margin-bottom:7px; }
 .sb-metric-label { font-size:10px; color:#6b6b6b; text-transform:uppercase; letter-spacing:0.5px; }
 .sb-metric-val   { font-size:22px; font-weight:700; color:#1a1a1a; margin-top:1px; }
@@ -180,8 +191,71 @@ html, body, [class*="css"], .stApp {
 .entity-delta-val.up { color:#15803D; font-weight:800; }
 .entity-delta-val.down { color:#B91C1C; font-weight:800; }
 .entity-delta-val.flat { color:#6B7280; font-weight:700; }
+
+/* Mobile Responsive Design */
+@media (max-width: 768px) {
+    .block-container { padding-left: 1rem !important; padding-right: 1rem !important; }
+    
+    /* Reorder columns on mobile - put chart first */
+    div[data-testid="stHorizontalBlock"] {
+        display: flex !important;
+        flex-direction: column-reverse !important;  
+    }
+    
+    .step-title { font-size:15px; }
+    .step-desc { font-size:12px; }
+    
+    .training-amount { font-size:24px; padding:10px 20px; }
+    
+    .flow-circle { width:40px; height:40px; font-size:10px; }
+    .flow-node-lbl { font-size:8px; max-width:48px; }
+    
+    .bsheet-body { grid-template-columns:1fr; }
+    .bsheet-col-left { border-right:none; border-bottom:0.5px solid rgba(0,0,0,0.08); }
+    
+    .bsheet-panel-grid { grid-template-columns: 1fr; }
+    
+    .choice-prompt { padding:10px 14px; font-size:11px; }
+    .mode-card { padding:18px 20px; }
+    .mode-title { font-size:16px; }
+    .mode-sub { font-size:11px; }
+}
+
+@media (max-width: 480px) {
+    .step-header-card, .step-header-sim { padding:12px 16px; margin-bottom:8px; }
+    .step-badge, .step-badge-s { font-size:9px; padding:2px 8px; }
+    .step-title { font-size:14px; margin-bottom:3px; }
+    .step-desc { font-size:11px; line-height:1.4; }
+    
+    .training-amount { font-size:20px; padding:8px 16px; margin:8px 0; }
+    
+    .flow-strip { padding:10px 12px; margin-bottom:8px; }
+    .flow-label { font-size:9px; }
+    .flow-circle { width:36px; height:36px; font-size:9px; }
+    .flow-node-lbl { font-size:7px; max-width:44px; }
+    
+    .insight-bar { padding:8px 12px; font-size:11px; }
+    
+    .choice-prompt { padding:9px 12px; font-size:10px; margin-bottom:10px; }
+    .choice-prompt-label { font-size:11px; }
+    .choice-prompt-sub { font-size:10px; }
+    
+    .tag { font-size:10px; padding:2px 8px; margin-top:5px; }
+    
+    .sb-metric { padding:8px 10px; margin-bottom:6px; }
+    .sb-metric-val { font-size:18px; }
+    .sb-metric-label { font-size:9px; }
+    
+    .mode-card { padding:14px 16px; }
+    .mode-title { font-size:15px; margin:8px 0 4px 0; }
+    .mode-sub { font-size:10px; }
+    
+    .complete-card { padding:20px 24px; }
+}
+
 </style>
 """, unsafe_allow_html=True)
+
 
 # ─── SCENARIOS ────────────────────────────────────────────────────────────────
 # training_amt: fixed amount used in training mode
@@ -744,19 +818,7 @@ with col_main:
                     unsafe_allow_html=True
                 )
 
-    # ── Navigation ────────────────────────────────────────────────────────────
-    st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
-    nav1, nav2 = st.columns(2)
-    with nav1:
-        if st.button("← Back", use_container_width=True, disabled=(step_i == 0)):
-            st.session_state[ss("step")] = max(0, step_i - 1)
-            st.rerun()
-    with nav2:
-        can_advance = step_i in st.session_state[ss("confirmed")]
-        label = "Finish 🎓" if step_i == len(SCENARIOS) - 1 else "Next Step →"
-        if st.button(label, use_container_width=True, disabled=not can_advance, type="primary"):
-            st.session_state[ss("step")] = step_i + 1
-            st.rerun()
+
 
 with col_chart:
     if len(st.session_state[ss("ms_history")]) > 1:
@@ -769,3 +831,16 @@ with col_chart:
             '</div>',
             unsafe_allow_html=True
         )
+# ── Navigation (Rendered Last for Mobile Layout) ────────────────────────────────
+st.markdown("<div style='height:12px'></div>", unsafe_allow_html=True)
+nav1, nav2 = st.columns(2)
+with nav1:
+    if st.button("← Back", use_container_width=True, disabled=(step_i == 0)):
+        st.session_state[ss("step")] = max(0, step_i - 1)
+        st.rerun()
+with nav2:
+    can_advance = step_i in st.session_state[ss("confirmed")]
+    label = "Finish 🎓" if step_i == len(SCENARIOS) - 1 else "Next Step →"
+    if st.button(label, use_container_width=True, disabled=not can_advance, type="primary"):
+        st.session_state[ss("step")] = step_i + 1
+        st.rerun()
