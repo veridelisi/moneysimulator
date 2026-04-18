@@ -200,7 +200,7 @@ html, body, [class*="css"], .stApp {
     .flow-circle { width:40px; height:40px; font-size:10px; }
     .flow-node-lbl { font-size:8px; max-width:48px; }
     
-    .bsheet-body { grid-template-columns:1fr; }
+    .bsheet-body { grid-template-columns:1fr 1fr; }
     .bsheet-col-left { border-right:none; border-bottom:0.5px solid rgba(0,0,0,0.08); }
     
     .bsheet-panel-grid { grid-template-columns: 1fr; }
