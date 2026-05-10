@@ -1,7 +1,7 @@
 from pathlib import Path
 import re
 
-src_path = Path("/pages/03_BanksReserves.py")
+src_path = Path(__file__)
 src = src_path.read_text(encoding="utf-8")
 
 new_scenarios = r'''SCENARIOS = [
@@ -207,6 +207,6 @@ src = src.replace('"<div style=\'font-size:2rem;font-weight:800;color:#1E1B4B;\'
 src = src.replace('From loan to cash withdrawal — the full monetary circuit', 'Interbank payments move reserves across Fed/Central Bank accounts')
 src = src.replace('← Back to Credit Creation', '← Back to Reserve Transfer')
 
-out_path = Path("/pages/03_BanksReserves.py")
+out_path = Path(__file__)
 out_path.write_text(src, encoding="utf-8")
 out_path
