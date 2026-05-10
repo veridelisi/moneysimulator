@@ -209,4 +209,3 @@ src = src.replace('← Back to Credit Creation', '← Back to Reserve Transfer')
 
 out_path = Path(__file__)
 out_path.write_text(src, encoding="utf-8")
-out_path
