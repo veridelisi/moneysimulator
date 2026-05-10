@@ -217,7 +217,7 @@ TREASURY = [
 
 BANKS = [
     [
-        dict(icon="💰", badge="Credit", title="Credit Creation",
+        dict(icon="💰", badge="Credit", title="redit Creation",
              desc="Banks create deposits when they lend.",
              key="bnk_credit",
              page="pages/03_Banks.py"),
