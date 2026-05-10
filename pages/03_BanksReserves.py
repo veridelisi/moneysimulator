@@ -3,14 +3,12 @@ import plotly.graph_objects as go
 from copy import deepcopy
 
 st.set_page_config(
-    page_title="Reserve Transfer · MoneySimulator",
+    page_title="Credit Creation · MoneySimulator",
     page_icon="🏦",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-
-# ---------------------------- STOP Expanded -----------------
 st.markdown(
     """
 <style>
@@ -21,7 +19,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# ─── TOP NAV ──────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
 .nav-container { display: flex; gap: 0.5rem; justify-content: center; }
@@ -30,9 +27,6 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-
-
-# ─── CSS ──────────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&display=swap');
@@ -40,7 +34,6 @@ html, body, [class*="css"], .stApp {
     font-family: 'Syne', 'Segoe UI', sans-serif !important;
 }
 .block-container { padding-top: 0.5rem !important; padding-bottom: 1rem !important; }
-
 
 .sb-metric { background:white; border:0.5px solid rgba(0,0,0,0.12); border-radius:8px; padding:10px 12px; margin-bottom:7px; }
 .sb-metric-label { font-size:10px; color:#6b6b6b; text-transform:uppercase; letter-spacing:0.5px; }
@@ -134,78 +127,21 @@ html, body, [class*="css"], .stApp {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap:12px;
 }
-.bsheet-stage-title {
-    font-size:11px;
-    font-weight:800;
-    color:#475569;
-    margin-bottom:8px;
-    text-transform:uppercase;
-    letter-spacing:0.4px;
-}
-.delta-chip {
-    display:inline-block;
-    font-size:10px;
-    font-weight:800;
-    border-radius:999px;
-    padding:3px 8px;
-    margin-left:6px;
-}
-.delta-up   { background:#DCFCE7; color:#166534; }
-.delta-down { background:#FEE2E2; color:#991B1B; }
-.delta-flat { background:#E5E7EB; color:#374151; }
 
-.entity-delta-box {
-    background:#fff;
-    border:1px dashed rgba(0,0,0,0.10);
-    border-radius:10px;
-    padding:10px 12px;
-    margin-top:10px;
-    margin-bottom:12px;
-}
-.entity-delta-title {
-    font-size:11px;
-    font-weight:800;
-    color:#334155;
-    margin-bottom:6px;
-    text-transform:uppercase;
-    letter-spacing:0.4px;
-}
-.entity-delta-row {
-    display:flex;
-    justify-content:space-between;
-    gap:8px;
-    font-size:11px;
-    padding:3px 0;
-}
-.entity-delta-name { color:#475569; }
-.entity-delta-val.up { color:#15803D; font-weight:800; }
-.entity-delta-val.down { color:#B91C1C; font-weight:800; }
-.entity-delta-val.flat { color:#6B7280; font-weight:700; }
-
-/* Mobile Responsive Design */
 @media (max-width: 768px) {
     .block-container { padding-left: 1rem !important; padding-right: 1rem !important; }
-    
-
-    
     .step-title { font-size:15px; }
     .step-desc { font-size:12px; }
-    
     .training-amount { font-size:24px; padding:10px 20px; }
-    
     .flow-circle { width:40px; height:40px; font-size:10px; }
     .flow-node-lbl { font-size:8px; max-width:48px; }
-    
     .bsheet-body { grid-template-columns:1fr 1fr; }
     .bsheet-col-left { border-right:none; border-bottom:0.5px solid rgba(0,0,0,0.08); }
-    
     .bsheet-panel-grid { grid-template-columns: 1fr; }
-    
     .choice-prompt { padding:10px 14px; font-size:11px; }
     .mode-card { padding:18px 20px; }
     .mode-title { font-size:16px; }
     .mode-sub { font-size:11px; }
-
     .bsheet-head { padding:5px 8px; }
     .bsheet-name { font-size:11px; }
     .bsheet-active-badge { font-size:8px; padding:1px 6px; }
@@ -221,32 +157,23 @@ html, body, [class*="css"], .stApp {
     .step-badge, .step-badge-s { font-size:9px; padding:2px 8px; }
     .step-title { font-size:14px; margin-bottom:3px; }
     .step-desc { font-size:11px; line-height:1.4; }
-    
     .training-amount { font-size:20px; padding:8px 16px; margin:8px 0; }
-    
     .flow-strip { padding:10px 12px; margin-bottom:8px; }
     .flow-label { font-size:9px; }
     .flow-circle { width:36px; height:36px; font-size:9px; }
     .flow-node-lbl { font-size:7px; max-width:44px; }
-    
     .insight-bar { padding:8px 12px; font-size:11px; }
-    
     .choice-prompt { padding:9px 12px; font-size:10px; margin-bottom:10px; }
     .choice-prompt-label { font-size:11px; }
     .choice-prompt-sub { font-size:10px; }
-    
     .tag { font-size:10px; padding:2px 8px; margin-top:5px; }
-    
     .sb-metric { padding:8px 10px; margin-bottom:6px; }
     .sb-metric-val { font-size:18px; }
     .sb-metric-label { font-size:9px; }
-    
     .mode-card { padding:14px 16px; }
     .mode-title { font-size:15px; margin:8px 0 4px 0; }
     .mode-sub { font-size:10px; }
-    
     .complete-card { padding:20px 24px; }
-
     .bsheet-name { font-size:10px; }
     .bsheet-col { padding:5px 6px; }
     .col-title-a, .col-title-l { font-size:7px; }
@@ -254,20 +181,17 @@ html, body, [class*="css"], .stApp {
     .bsheet-row .bval { font-size:8px; }
     .bsheet-total { font-size:8px; }
 }
-
 </style>
 """, unsafe_allow_html=True)
 
 
 # ─── SCENARIOS ────────────────────────────────────────────────────────────────
-# training_amt: fixed amount used in training mode
-# sim_opts: choices shown in simulation mode
 SCENARIOS = [
     {
         "id": 1, "emoji": "✨",
         "title": "Bank X Grants a Loan to Customer A",
-        "short": "Bank X approves Customer A's loan and creates a matching deposit on its own balance sheet.",
-        "insight": "Bank X does not lend out pre-existing deposits. It expands both sides of its balance sheet at once: a <strong>Loan</strong> asset and a <strong>Customer A Deposit</strong> liability. Customer A receives new purchasing power.",
+        "short": "Bank X approves Customer A's loan application and creates money via a double-entry.",
+        "insight": "Bank X didn't move existing money from a vault. It typed two numbers at once: a <strong>Loan</strong> on the asset side and a <strong>Deposit</strong> on the liability side. Customer A now has purchasing power that didn't exist a moment ago. This is endogenous money creation — no savings were needed.",
         "tag": "💚 Money Created", "tag_type": "green",
         "choice_type": "loan",
         "training_amt": 200,
@@ -276,34 +200,34 @@ SCENARIOS = [
         "involved": ["BankX", "CustomerA"],
     },
     {
-        "id": 2, "emoji": "💳",
+        "id": 2, "emoji": "🏦",
         "title": "Bank Y Grants a Loan to Customer B",
-        "short": "Bank Y grants Customer B a loan and creates a new deposit for Customer B.",
-        "insight": "Bank Y creates money in the same way. It records a <strong>Loan</strong> on the asset side and a <strong>Customer B Deposit</strong> on the liability side. This is a second independent credit-creation event.",
+        "short": "Bank Y independently creates a loan for Customer B — another money-creation event.",
+        "insight": "Every bank creates money independently. Bank Y didn't need Bank X's deposits or the Central Bank's permission. It simply wrote two entries: <strong>Loan</strong> on the asset side and <strong>Deposit</strong> on the liability side. The money supply expands again — pure accounting.",
         "tag": "💚 Money Created", "tag_type": "green",
-        "choice_type": "loan",
+        "choice_type": "loan_y",
         "training_amt": 150,
         "sim_opts": [100, 150, 200, 300],
         "sim_label": "How much does Bank Y loan to Customer B?",
         "involved": ["BankY", "CustomerB"],
     },
     {
-        "id": 3, "emoji": "🏦",
+        "id": 3, "emoji": "💳",
         "title": "Bank X Grants a Loan to Customer C",
-        "short": "Bank X also grants Customer C a loan, creating another deposit inside Bank X.",
-        "insight": "Bank X now has two deposit customers. The loan to Customer C creates a new <strong>Customer C Deposit</strong> liability. No reserves are required for this same-bank money creation event.",
+        "short": "Bank X approves a second loan — this time for Customer C, who also banks at Bank X.",
+        "insight": "Bank X creates another deposit for Customer C with the same mechanism: <strong>Loan ↑ on assets, Deposit ↑ on liabilities</strong>. Both Customer A and Customer C now hold deposits at Bank X, but the bank didn't move money between them — it created new money for each from scratch.",
         "tag": "💚 Money Created", "tag_type": "green",
-        "choice_type": "loan",
-        "training_amt": 120,
-        "sim_opts": [80, 120, 180, 240],
+        "choice_type": "loan_c",
+        "training_amt": 180,
+        "sim_opts": [100, 180, 250, 300],
         "sim_label": "How much does Bank X loan to Customer C?",
         "involved": ["BankX", "CustomerC"],
     },
     {
         "id": 4, "emoji": "🏛️",
         "title": "Central Bank Provides Reserves to Both Banks",
-        "short": "The Central Bank provides reserves to Bank X and Bank Y for settlement capacity.",
-        "insight": "Reserves are the <strong>settlement currency between banks</strong>. They sit on the Central Bank's ledger. They do not enter customer deposits directly, but they allow banks to settle payments across banks.",
+        "short": "The Central Bank lends reserves to Bank X and Bank Y so interbank payments can be settled.",
+        "insight": "Reserves are the <strong>settlement currency between banks</strong> — they live only inside the Central Bank's ledger and never enter the public money supply (M1). Without reserves, banks cannot settle payments with each other. The Central Bank is the only entity that can create them.",
         "tag": "➡️ No M1 Change", "tag_type": "blue",
         "choice_type": "reserve",
         "training_amt": 300,
@@ -314,32 +238,32 @@ SCENARIOS = [
     {
         "id": 5, "emoji": "🔁",
         "title": "Customer A Sends Money to Customer C — Same Bank Transfer",
-        "short": "Customer A pays Customer C. Both customers are at Bank X, so only Bank X's deposit liabilities shift.",
-        "insight": "This is a <strong>same-bank transfer</strong>. Bank X reduces Customer A's deposit and increases Customer C's deposit. No reserves move, because the payment stays inside Bank X. Total M1 is unchanged.",
+        "short": "Customer A pays Customer C. Both bank at Bank X — no reserves need to move.",
+        "insight": "When both sender and receiver hold accounts at the <strong>same bank</strong>, the transfer is purely internal. Bank X simply reduces Customer A's deposit and increases Customer C's deposit. <strong>No reserves move at the Central Bank.</strong> Total M1 is unchanged — the money moved within the same ledger. This is cheaper and faster than interbank settlement.",
         "tag": "➡️ No M1 Change", "tag_type": "blue",
-        "choice_type": "transfer_same",
+        "choice_type": "same_bank_transfer",
         "training_amt": 50,
         "sim_opts": [20, 50, 80, 100],
         "sim_label": "How much does Customer A send to Customer C?",
         "involved": ["BankX", "CustomerA", "CustomerC"],
     },
     {
-        "id": 6, "emoji": "⚡",
+        "id": 6, "emoji": "🔄",
         "title": "Customer B Sends Money to Customer A — Interbank Reserve Transfer",
-        "short": "Customer B pays Customer A. The payment crosses from Bank Y to Bank X, so reserves must move.",
-        "insight": "This is an <strong>interbank transfer</strong>. Customer B's deposit at Bank Y falls and Customer A's deposit at Bank X rises. To settle the payment, Bank Y transfers reserves to Bank X through the Central Bank. Total M1 is unchanged, but reserves shift between banks.",
+        "short": "Customer B (Bank Y) pays Customer A (Bank X) — reserves must move at the Central Bank.",
+        "insight": "This is where reserves earn their role. Customer B banks at Bank Y, Customer A banks at Bank X. Bank Y must transfer reserves to Bank X at the Central Bank to settle the payment. <strong>Customer B's deposit shrinks, Bank Y loses reserves. Customer A's deposit grows, Bank X gains reserves.</strong> Total M1 is unchanged — money just crossed from one bank's ledger to another.",
         "tag": "➡️ No M1 Change", "tag_type": "blue",
-        "choice_type": "transfer_interbank",
-        "training_amt": 70,
-        "sim_opts": [30, 70, 100, 130],
+        "choice_type": "interbank_transfer",
+        "training_amt": 60,
+        "sim_opts": [20, 60, 80, 100],
         "sim_label": "How much does Customer B send to Customer A?",
         "involved": ["BankX", "BankY", "CentralBank", "CustomerA", "CustomerB"],
     },
     {
         "id": 7, "emoji": "🎓",
         "title": "Reserve Transfer Review",
-        "short": "Review the difference between same-bank deposit transfers and interbank reserve settlement.",
-        "insight": "Same-bank transfers only rearrange deposit liabilities inside one bank. Interbank transfers require reserve settlement between banks. Loans create deposits; transfers move deposits; reserves settle payments across banks.",
+        "short": "You completed the full reserve-and-credit circuit — from money creation to interbank settlement.",
+        "insight": "Banks create money independently when they lend — no reserves required for creation. Reserves only matter when money crosses bank boundaries (interbank settlement). Same-bank transfers need no reserves at all. The Central Bank controls the reserve pool; commercial banks control the deposit money supply. Your choices shaped the final M1.",
         "tag": "🎓 Complete!", "tag_type": "green",
         "choice_type": "none",
         "training_amt": 0,
@@ -353,15 +277,19 @@ SCENARIOS = [
 ENTITY_DEFS = {
     "BankX":       {"label": "Bank X",       "assets": {"Loans":0,"Reserves":0,"Cash":0},    "liabilities": {"CustADep":0,"CustCDep":0,"DueCB":0}},
     "BankY":       {"label": "Bank Y",       "assets": {"Loans":0,"Reserves":0,"Cash":0},    "liabilities": {"CustBDep":0,"DueCB":0}},
-    "CentralBank": {"label": "Central Bank", "assets": {"LoansToBanks":0},                   "liabilities": {"Reserves":0,"Cash":0}},
-    "CustomerA":   {"label": "Customer A",   "assets": {"Deposits":0,"Cash":0},              "liabilities": {"Loans":0}},
-    "CustomerB":   {"label": "Customer B",   "assets": {"Deposits":0,"Cash":0},              "liabilities": {"Loans":0}},
-    "CustomerC":   {"label": "Customer C",   "assets": {"Deposits":0,"Cash":0},              "liabilities": {"Loans":0}},
+    "CentralBank": {"label": "Central Bank", "assets": {"LoansToBanks":0},                   "liabilities": {"Reserves":0}},
+    "CustomerA":   {"label": "Customer A",   "assets": {"Deposits":0},                       "liabilities": {"Loans":0}},
+    "CustomerB":   {"label": "Customer B",   "assets": {"Deposits":0},                       "liabilities": {"Loans":0}},
+    "CustomerC":   {"label": "Customer C",   "assets": {"Deposits":0},                       "liabilities": {"Loans":0}},
 }
 ENTITY_ORDER = ["BankX","BankY","CentralBank","CustomerA","CustomerB","CustomerC"]
+
 FRIENDLY = {
-    "CustADep":"Cust A Dep","CustBDep":"Cust B Dep","CustCDep":"Cust C Dep",
-    "DueCB":"Due to CB","LoansToBanks":"Loans→Banks",
+    "CustADep":     "Cust A Dep",
+    "CustBDep":     "Cust B Dep",
+    "CustCDep":     "Cust C Dep",
+    "DueCB":        "Due to CB",
+    "LoansToBanks": "Loans→Banks",
 }
 def fname(k): return FRIENDLY.get(k, k)
 
@@ -384,73 +312,95 @@ def compute_ms(state):
     bank_deps = (state["BankX"]["liabilities"].get("CustADep",0)
                + state["BankX"]["liabilities"].get("CustCDep",0)
                + state["BankY"]["liabilities"].get("CustBDep",0))
-    cash = (state["CustomerA"]["assets"].get("Cash",0)
-          + state["CustomerB"]["assets"].get("Cash",0)
-          + state["CustomerC"]["assets"].get("Cash",0))
+    cash = 0  # no cash in this scenario set
     return bank_deps, cash, bank_deps + cash
 
 # ─── TRANSACTION BUILDERS ─────────────────────────────────────────────────────
 def build_transactions(sc_id, amt):
+    # 1: Bank X loans Customer A
     if sc_id == 1:
-        # Bank X creates a loan for Customer A.
         return [
-            ("BankX","debit","Loans",amt), ("BankX","credit","CustADep",amt),
-            ("CustomerA","debit","Deposits",amt), ("CustomerA","credit","Loans",amt),
-        ]
-    elif sc_id == 2:
-        # Bank Y creates a loan for Customer B.
-        return [
-            ("BankY","debit","Loans",amt), ("BankY","credit","CustBDep",amt),
-            ("CustomerB","debit","Deposits",amt), ("CustomerB","credit","Loans",amt),
-        ]
-    elif sc_id == 3:
-        # Bank X creates a loan for Customer C.
-        return [
-            ("BankX","debit","Loans",amt), ("BankX","credit","CustCDep",amt),
-            ("CustomerC","debit","Deposits",amt), ("CustomerC","credit","Loans",amt),
-        ]
-    elif sc_id == 4:
-        # Central Bank provides reserves to both banks.
-        return [
-            ("BankX","debit","Reserves",amt), ("BankX","credit","DueCB",amt),
-            ("BankY","debit","Reserves",amt), ("BankY","credit","DueCB",amt),
-            ("CentralBank","debit","LoansToBanks",amt*2), ("CentralBank","credit","Reserves",amt*2),
-        ]
-    elif sc_id == 5:
-        # Customer A pays Customer C inside Bank X: deposits shift, no reserves move.
-        return [
-            ("BankX","debit","CustADep",amt), ("BankX","credit","CustCDep",amt),
-            ("CustomerA","credit","Deposits",amt),
-            ("CustomerC","debit","Deposits",amt),
-        ]
-    elif sc_id == 6:
-        # Customer B pays Customer A across banks: deposits shift and reserves settle.
-        return [
-            ("BankY","debit","CustBDep",amt), ("BankY","credit","Reserves",amt),
-            ("BankX","debit","Reserves",amt), ("BankX","credit","CustADep",amt),
-            ("CustomerB","credit","Deposits",amt),
+            ("BankX","debit","Loans",amt),
+            ("BankX","credit","CustADep",amt),
             ("CustomerA","debit","Deposits",amt),
+            ("CustomerA","credit","Loans",amt),
+        ]
+    # 2: Bank Y loans Customer B
+    elif sc_id == 2:
+        return [
+            ("BankY","debit","Loans",amt),
+            ("BankY","credit","CustBDep",amt),
+            ("CustomerB","debit","Deposits",amt),
+            ("CustomerB","credit","Loans",amt),
+        ]
+    # 3: Bank X loans Customer C
+    elif sc_id == 3:
+        return [
+            ("BankX","debit","Loans",amt),
+            ("BankX","credit","CustCDep",amt),
+            ("CustomerC","debit","Deposits",amt),
+            ("CustomerC","credit","Loans",amt),
+        ]
+    # 4: Central Bank provides reserves to both banks
+    elif sc_id == 4:
+        return [
+            ("BankX","debit","Reserves",amt),
+            ("BankX","credit","DueCB",amt),
+            ("BankY","debit","Reserves",amt),
+            ("BankY","credit","DueCB",amt),
+            ("CentralBank","debit","LoansToBanks",amt*2),
+            ("CentralBank","credit","Reserves",amt*2),
+        ]
+    # 5: Customer A → Customer C (same bank, Bank X internal)
+    elif sc_id == 5:
+        return [
+            # Bank X: reduce CustA deposit, increase CustC deposit (internal ledger move)
+            ("BankX","debit","CustADep",amt),
+            ("BankX","credit","CustCDep",amt),
+            # Customer A: deposits shrink
+            ("CustomerA","debit","Loans",amt),       # reuse debit side trick: reduce asset
+            ("CustomerA","credit","Deposits",amt),
+            # Customer C: deposits grow
+            ("CustomerC","debit","Deposits",amt),
+            ("CustomerC","credit","Loans",amt),       # reduce liability (net worth up)
+        ]
+    # 6: Customer B → Customer A (interbank: Bank Y → Bank X via Central Bank)
+    elif sc_id == 6:
+        return [
+            # Bank Y: reduce CustB deposit, transfer reserves out
+            ("BankY","debit","CustBDep",amt),
+            ("BankY","credit","Reserves",amt),
+            # Bank X: increase CustA deposit, receive reserves
+            ("BankX","debit","Reserves",amt),
+            ("BankX","credit","CustADep",amt),
+            # Central Bank: reserves shift between banks (internal reallocation, net zero)
+            # Customer B: deposit shrinks
+            ("CustomerB","debit","Loans",amt),
+            ("CustomerB","credit","Deposits",amt),
+            # Customer A: deposit grows
+            ("CustomerA","debit","Deposits",amt),
+            ("CustomerA","credit","Loans",amt),
         ]
     return []
 
-# ─── FLOW BUILDER ─────────────────────────────────────────────────────────────
-BX  = {"id":"BankX",      "label":"Bank X",      "abbr":"BX", "bg":"#E6F1FB","border":"#378ADD","color":"#185FA5"}
-BY  = {"id":"BankY",      "label":"Bank Y",      "abbr":"BY", "bg":"#EAF3DE","border":"#1D9E75","color":"#3B6D11"}
-CB  = {"id":"CentralBank","label":"Central Bank","abbr":"FED", "bg":"#E1F5EE","border":"#1D9E75","color":"#0F6E56"}
-CA  = {"id":"CustomerA",  "label":"Customer A",  "abbr":"A", "bg":"#FAEEDA","border":"#EF9F27","color":"#854F0B"}
-CUSTB = {"id":"CustomerB",  "label":"Customer B",  "abbr":"B", "bg":"#FBEAF0","border":"#D4537E","color":"#72243E"}
-CC  = {"id":"CustomerC",  "label":"Customer C",  "abbr":"C", "bg":"#F3E8FF","border":"#A855F7","color":"#581C87"}
+# ─── FLOW NODES ───────────────────────────────────────────────────────────────
+BX  = {"id":"BankX",      "label":"Bank X",       "abbr":"BX", "bg":"#E6F1FB","border":"#378ADD","color":"#185FA5"}
+BY  = {"id":"BankY",      "label":"Bank Y",       "abbr":"BY", "bg":"#EAF3DE","border":"#1D9E75","color":"#3B6D11"}
+CB  = {"id":"CentralBank","label":"Central Bank", "abbr":"CB", "bg":"#E1F5EE","border":"#1D9E75","color":"#0F6E56"}
+CA  = {"id":"CustomerA",  "label":"Customer A",   "abbr":"CA", "bg":"#FAEEDA","border":"#EF9F27","color":"#854F0B"}
+CBt = {"id":"CustomerB",  "label":"Customer B",   "abbr":"CB", "bg":"#FBEAF0","border":"#D4537E","color":"#72243E"}
+CC  = {"id":"CustomerC",  "label":"Customer C",   "abbr":"CC", "bg":"#F3E8FF","border":"#A855F7","color":"#6B21A8"}
 
 def arr(amt, note): return {"arrow":True,"amt":amt,"note":note}
 
 def build_flow(sc_id, amt):
     a = f"${amt}"
-    if sc_id == 1: return [BX, arr(f"{a} loan","creates ↗"), CA]
-    elif sc_id == 2: return [BY, arr(f"{a} loan","creates ↗"), CUSTB]
+    if sc_id == 1:   return [BX, arr(f"{a} loan","creates ↗"), CA]
+    elif sc_id == 2: return [BY, arr(f"{a} loan","creates ↗"), CBt]
     elif sc_id == 3: return [BX, arr(f"{a} loan","creates ↗"), CC]
     elif sc_id == 4: return [CB, arr(f"{a} each","reserves"), BX, BY]
-    elif sc_id == 5: return [CA, arr(f"{a} deposit","inside BX"), BX, arr(f"{a} deposit","same bank"), CC]
-    elif sc_id == 6: return [CUSTB, BY, arr(f"{a} reserves","via FED"), CB, arr(f"{a} reserves","settled"), BX, CA]
+    elif sc_id == 5: return [CA, arr(f"{a}","same bank ↔"), BX, arr(f"{a}","internal"), CC]
+    elif sc_id == 6: return [CBt, BX, arr(f"{a} reserves","via CB"), CB, arr(f"{a} reserves","settled"), BX, CA]
     return []
 
 # ─── RENDER HELPERS ───────────────────────────────────────────────────────────
@@ -504,18 +454,14 @@ def bsheet_html(ek, state, active):
             f'<div class="bsheet-col"><div class="col-title-l">Liabilities</div>{lr}</div>'
             f'</div><div class="bsheet-total"><span class="t-a">${ta}</span><span class="t-l">{tl_str}</span></div></div>')
 
-
-
 def render_step_balance_sheets(state, involved_entities):
     if not involved_entities:
         return
-
     blocks = "".join(bsheet_html(ek, state, True) for ek in involved_entities)
     st.markdown(
         f'<div class="bsheet-panel"><div class="bsheet-panel-grid">{blocks}</div></div>',
         unsafe_allow_html=True
     )
-
 
 def ms_chart(history, height=240):
     labels = [d["label"] for d in history]
@@ -572,9 +518,9 @@ if st.session_state[ss("mode")] is None:
     st.markdown("<div style='height:2rem'></div>", unsafe_allow_html=True)
     st.markdown("""
         <div style='text-align:center;margin-bottom:2rem;'>
-            <div style='font-size:2rem;font-weight:800;color:#1E1B4B;'>🏦 Reserve Transfer</div>
+            <div style='font-size:2rem;font-weight:800;color:#1E1B4B;'>🏦 Credit Creation</div>
             <div style='font-size:1rem;color:#6b6b6b;margin-top:6px;'>
-                From loan creation to same-bank and interbank reserve settlement
+                From loan to interbank settlement — the full monetary circuit
             </div>
         </div>
     """, unsafe_allow_html=True)
@@ -613,17 +559,17 @@ if st.session_state[ss("mode")] is None:
             st.rerun()
     st.stop()
 
-# ─── SIDEBAR ─────────────────────────────────────────────────────────────────
+# ─── SETUP ───────────────────────────────────────────────────────────────────
 mode   = st.session_state[ss("mode")]
 step_i = st.session_state[ss("step")]
 sc     = SCENARIOS[min(step_i, len(SCENARIOS)-1)]
 IS_TRAINING = mode == "training"
 
-# ─── TOP NAV (when in mode) ───────────────────────────────────────────────────
+# ─── TOP NAV ─────────────────────────────────────────────────────────────────
 if mode is not None:
     col_nav_home, col_nav_spacer = st.columns([1, 5])
     with col_nav_home:
-        if st.button("← Back to Reserve Transfer", use_container_width=True, type="secondary"):
+        if st.button("← Back to Credit Creation", use_container_width=True, type="secondary"):
             reset()
             st.switch_page("03_Banks.py")
 
@@ -632,7 +578,6 @@ with st.sidebar:
         st.switch_page("streamlit_app.py")
     st.markdown("<div style='height:6px'></div>", unsafe_allow_html=True)
 
-    # Mode badge
     mode_label = "📖 Training Mode" if IS_TRAINING else "🎮 Simulation Mode"
     mode_color = "#6366F1" if IS_TRAINING else "#F59E0B"
     st.markdown(
@@ -667,7 +612,6 @@ with st.sidebar:
         unsafe_allow_html=True
     )
 
-
     st.markdown("---")
     c1, c2 = st.columns(2)
     with c1:
@@ -683,7 +627,7 @@ if step_i >= len(SCENARIOS):
         '<div class="complete-card"><div style="font-size:48px;margin-bottom:8px;">🎓</div>'
         '<div style="font-size:22px;font-weight:800;color:#065F46;margin-bottom:6px;">Full Cycle Complete!</div>'
         '<div style="font-size:14px;color:#047857;line-height:1.6;">'
-        'You traced loan creation, same-bank deposit transfer, and interbank reserve settlement. All accounted for.'
+        'You traced money from creation to interbank settlement — loans, reserves, same-bank and cross-bank transfers. All accounted for.'
         '</div></div>',
         unsafe_allow_html=True
     )
@@ -717,9 +661,7 @@ col_main, col_chart = st.columns([3, 2])
 with col_main:
     already_confirmed = step_i in st.session_state[ss("confirmed")]
 
-
     if sc["choice_type"] == "none":
-        # Auto-confirm
         st.markdown(f'<div class="insight-bar">💡 {sc["insight"]}</div>', unsafe_allow_html=True)
         st.session_state[ss("confirmed")].add(step_i)
 
@@ -749,25 +691,15 @@ with col_main:
                 st.session_state[ss("chosen")][step_i] = amt
                 st.rerun()
         else:
-            render_step_balance_sheets(
-            st.session_state[ss("ledger")],
-            sc["involved"]
-    )
-
+            render_step_balance_sheets(st.session_state[ss("ledger")], sc["involved"])
             if len(st.session_state[ss("ms_history")]) > 1:
-                    st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
-                    st.plotly_chart(
-                    ms_chart(st.session_state[ss("ms_history")]),
-                    use_container_width=True
-        )
+                st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
+                st.plotly_chart(ms_chart(st.session_state[ss("ms_history")]), use_container_width=True)
 
     else:
         # ── SIMULATION MODE ──
         if already_confirmed:
-            render_step_balance_sheets(
-                st.session_state[ss("ledger")],
-                sc["involved"]
-            )
+            render_step_balance_sheets(st.session_state[ss("ledger")], sc["involved"])
         else:
             st.markdown(
                 f'<div class="choice-prompt">'
@@ -801,11 +733,9 @@ with col_main:
                 ):
                     txs = build_transactions(sc["id"], chosen_amt)
                     new_ledger = apply_tx(st.session_state[ss("ledger")], txs)
-
                     st.session_state[ss("ledger")] = new_ledger
                     st.session_state[ss("chosen")][step_i] = chosen_amt
                     st.session_state[ss("confirmed")].add(step_i)
-
                     bm, cm, tot = compute_ms(new_ledger)
                     st.session_state[ss("ms_history")].append(
                         {"label": f"Step {sc['id']}", "bank": bm, "cash": cm, "total": tot}
@@ -817,10 +747,7 @@ with col_main:
                     unsafe_allow_html=True
                 )
 
-
-
-
-# ── Navigation (Rendered Last for Mobile Layout) ────────────────────────────────
+# ── Navigation ────────────────────────────────────────────────────────────────
 st.markdown("<div style='height:12px'></div>", unsafe_allow_html=True)
 nav1, nav2 = st.columns(2)
 with nav1:
