@@ -238,7 +238,7 @@ BANKS = [
         dict(icon="🏧", badge="Withdraw", title="Cash Withdrawal",
              desc="Withdrawal mechanics and reserve drain.",
              key="bnk_withdraw",
-             page="pages/banks_cash_withdrawal.py"),
+             page="pages/03_BanksCash.py"),
 
         dict(icon="📋", badge="Capital", title="Capital Requirements",
              desc="How regulatory ratios constrain credit expansion.",
