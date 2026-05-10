@@ -217,14 +217,25 @@ TREASURY = [
 
 BANKS = [
     [
-        dict(icon="💰", badge="Credit",   title="Credit Creation",
-             desc="Banks create deposits when they lend.", key="bnk_credit"),
+        dict(icon="💰", badge="Credit", title="Credit Creation",
+             desc="Banks create deposits when they lend.",
+             key="bnk_credit",
+             page="pages/03_Banks.py"),
+
         dict(icon="↔️", badge="Transfer", title="Reserve Transfer",
-             desc="Interbank payments move reserves across Fed accounts.", key="bnk_transfer"),
+             desc="Interbank payments move reserves across Fed accounts.",
+             key="bnk_transfer",
+             page="pages/03_BanksReserves.py"),
+
         dict(icon="🏧", badge="Withdraw", title="Cash Withdrawal",
-             desc="Withdrawal mechanics and reserve drain.", key="bnk_withdraw"),
-        dict(icon="📋", badge="Capital",  title="Capital Requirements",
-             desc="How regulatory ratios constrain credit expansion.", key="bnk_capital"),
+             desc="Withdrawal mechanics and reserve drain.",
+             key="bnk_withdraw",
+             page="pages/banks_cash_withdrawal.py"),
+
+        dict(icon="📋", badge="Capital", title="Capital Requirements",
+             desc="How regulatory ratios constrain credit expansion.",
+             key="bnk_capital",
+             page="pages/banks_capital_requirements.py"),
     ],
 ]
 
