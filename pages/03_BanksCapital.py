@@ -894,8 +894,7 @@ with col_main:
 
 with col_chart:
     st.markdown(capital_monitor_html(st.session_state[ss("ledger")]), unsafe_allow_html=True)
-    if len(st.session_state[ss("ms_history")]) > 1:
-        st.plotly_chart(ms_chart(st.session_state[ss("ms_history")], height=260), use_container_width=True)
+   
 
 
 # ── Navigation (Rendered Last for Mobile Layout) ────────────────────────────────
