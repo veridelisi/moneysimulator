@@ -168,12 +168,20 @@ def section(title, sub, accent_cls):
         <div class="section-sub">{sub}</div>
     </div>""", unsafe_allow_html=True)
 
-def render_rows(rows, header_cls, page):
+def render_rows(rows, header_cls):
     for row in rows:
         cols = st.columns(4, gap="small")
         for i, c in enumerate(row):
-            sc_card(cols[i], c["icon"], c["badge"], c["title"],
-                    c["desc"], header_cls, page, c["key"])
+            sc_card(
+                cols[i],
+                c["icon"],
+                c["badge"],
+                c["title"],
+                c["desc"],
+                header_cls,
+                c["page"],
+                c["key"]
+            )
         st.markdown("<div style='height:4px'></div>", unsafe_allow_html=True)
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -217,7 +225,7 @@ TREASURY = [
 
 BANKS = [
     [
-        dict(icon="💰", badge="Credit", title="redit Creation",
+        dict(icon="💰", badge="Credit", title="Credit Creation",
              desc="Banks create deposits when they lend.",
              key="bnk_credit",
              page="pages/03_Banks.py"),
