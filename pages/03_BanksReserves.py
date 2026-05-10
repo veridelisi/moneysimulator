@@ -3,7 +3,7 @@ import plotly.graph_objects as go
 from copy import deepcopy
 
 st.set_page_config(
-    page_title="Credit Creation · MoneySimulator",
+    page_title="Reserve Transfer · MoneySimulator",
     page_icon="🏦",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -265,9 +265,9 @@ html, body, [class*="css"], .stApp {
 SCENARIOS = [
     {
         "id": 1, "emoji": "✨",
-        "title": "Bank X Grants a Loan — Money is Born",
-        "short": "Bank X approves Customer A's loan application and writes two entries simultaneously.",
-        "insight": "Bank X didn't move existing money from a vault. It typed two numbers at once: a <strong>Loan</strong> on the asset side and a <strong>Deposit</strong> on the liability side. Customer A now has purchasing power that didn't exist a moment ago. This is endogenous money creation — no savings were needed.",
+        "title": "Bank X Grants a Loan to Customer A",
+        "short": "Bank X approves Customer A's loan and creates a matching deposit on its own balance sheet.",
+        "insight": "Bank X does not lend out pre-existing deposits. It expands both sides of its balance sheet at once: a <strong>Loan</strong> asset and a <strong>Customer A Deposit</strong> liability. Customer A receives new purchasing power.",
         "tag": "💚 Money Created", "tag_type": "green",
         "choice_type": "loan",
         "training_amt": 200,
@@ -276,22 +276,10 @@ SCENARIOS = [
         "involved": ["BankX", "CustomerA"],
     },
     {
-        "id": 2, "emoji": "🏛️",
-        "title": "Central Bank Provides Reserves to Both Banks",
-        "short": "The Central Bank lends reserves to Bank X and Bank Y so interbank payments can be settled.",
-        "insight": "Reserves are the <strong>settlement currency between banks</strong> — they live only inside the Central Bank's ledger and never enter the public money supply (M1). Without reserves, banks cannot settle payments with each other. The Central Bank is the only entity that can create them.",
-        "tag": "➡️ No M1 Change", "tag_type": "blue",
-        "choice_type": "reserve",
-        "training_amt": 300,
-        "sim_opts": [200, 300, 400, 500],
-        "sim_label": "How much in reserves does the Central Bank provide to each bank?",
-        "involved": ["BankX", "BankY", "CentralBank"],
-    },
-    {
-        "id": 3, "emoji": "💳",
-        "title": "Bank Y Also Creates a Loan for Customer B",
-        "short": "Bank Y grants Customer B a loan — another independent money-creation event.",
-        "insight": "Every bank creates money independently. Bank Y didn't need Bank X's deposits or the Central Bank's permission. It simply wrote two entries: <strong>Loan</strong> on the asset side and <strong>Deposit</strong> on the liability side. The money supply expands again — pure accounting.",
+        "id": 2, "emoji": "💳",
+        "title": "Bank Y Grants a Loan to Customer B",
+        "short": "Bank Y grants Customer B a loan and creates a new deposit for Customer B.",
+        "insight": "Bank Y creates money in the same way. It records a <strong>Loan</strong> on the asset side and a <strong>Customer B Deposit</strong> on the liability side. This is a second independent credit-creation event.",
         "tag": "💚 Money Created", "tag_type": "green",
         "choice_type": "loan",
         "training_amt": 150,
@@ -300,58 +288,58 @@ SCENARIOS = [
         "involved": ["BankY", "CustomerB"],
     },
     {
-        "id": 4, "emoji": "🔄",
-        "title": "Customer A Pays Customer B — Cross-Bank Transfer",
-        "short": "Customer A (Bank X) sends money to Customer B (Bank Y) — reserves must move at the Central Bank.",
-        "insight": "This is where reserves earn their role. Customer A banks at Bank X, Customer B at Bank Y. Bank X must transfer reserves to Bank Y at the Central Bank to settle the payment. <strong>Customer A's deposit shrinks, Bank X loses reserves. Customer B's deposit grows, Bank Y gains reserves.</strong> Total M1 is unchanged — money just crossed from one bank's ledger to another.",
-        "tag": "➡️ No M1 Change", "tag_type": "blue",
-        "choice_type": "transfer",
-        "training_amt": 50,
-        "sim_opts": [20, 50, 80, 100],
-        "sim_label": "How much does Customer A send to Customer B?",
-        "involved": ["BankX", "BankY", "CentralBank", "CustomerA", "CustomerB"],
+        "id": 3, "emoji": "🏦",
+        "title": "Bank X Grants a Loan to Customer C",
+        "short": "Bank X also grants Customer C a loan, creating another deposit inside Bank X.",
+        "insight": "Bank X now has two deposit customers. The loan to Customer C creates a new <strong>Customer C Deposit</strong> liability. No reserves are required for this same-bank money creation event.",
+        "tag": "💚 Money Created", "tag_type": "green",
+        "choice_type": "loan",
+        "training_amt": 120,
+        "sim_opts": [80, 120, 180, 240],
+        "sim_label": "How much does Bank X loan to Customer C?",
+        "involved": ["BankX", "CustomerC"],
     },
     {
-        "id": 5, "emoji": "💵",
-        "title": "Banks Withdraw Physical Cash from Central Bank",
-        "short": "Each bank converts some reserves into physical cash to stock their ATMs and branches.",
-        "insight": "Banks are converting reserves — which sit locked inside the Central Bank's ledger — into physical cash stored in their vaults. The cash is in the bank's possession but <strong>not yet in public hands, so it doesn't count as M1 yet</strong>. One form of central bank money simply became another form, sitting in a different drawer.",
-        "tag": "🔀 Form Change Only", "tag_type": "blue",
-        "choice_type": "cash_bank",
-        "training_amt": 80,
-        "sim_opts": [40, 80, 100, 120],
-        "sim_label": "How much cash does each bank withdraw from the Central Bank?",
+        "id": 4, "emoji": "🏛️",
+        "title": "Central Bank Provides Reserves to Both Banks",
+        "short": "The Central Bank provides reserves to Bank X and Bank Y for settlement capacity.",
+        "insight": "Reserves are the <strong>settlement currency between banks</strong>. They sit on the Central Bank's ledger. They do not enter customer deposits directly, but they allow banks to settle payments across banks.",
+        "tag": "➡️ No M1 Change", "tag_type": "blue",
+        "choice_type": "reserve",
+        "training_amt": 300,
+        "sim_opts": [200, 300, 400, 500],
+        "sim_label": "How much in reserves does the Central Bank provide to each bank?",
         "involved": ["BankX", "BankY", "CentralBank"],
     },
     {
-        "id": 6, "emoji": "🏧",
-        "title": "Customers Withdraw Physical Cash",
-        "short": "Customer A and Customer B each take some cash from their respective banks.",
-        "insight": "When a customer withdraws cash, their <strong>bank deposit is destroyed</strong> — it disappears from the liability side. But physical cash appears in the customer's hands, entering public circulation for the first time. M1 doesn't change: the deposit counted before is gone, but the cash that replaced it is now counted instead. Banks needed vault cash from Step 5 to make this possible.",
-        "tag": "🔀 Form Change Only", "tag_type": "blue",
-        "choice_type": "cash_cust",
-        "training_amt": 30,
-        "sim_opts": [10, 30, 50, 60],
-        "sim_label": "How much cash does each customer withdraw?",
-        "involved": ["BankX", "BankY", "CustomerA", "CustomerB"],
+        "id": 5, "emoji": "🔁",
+        "title": "Customer A Sends Money to Customer C — Same Bank Transfer",
+        "short": "Customer A pays Customer C. Both customers are at Bank X, so only Bank X's deposit liabilities shift.",
+        "insight": "This is a <strong>same-bank transfer</strong>. Bank X reduces Customer A's deposit and increases Customer C's deposit. No reserves move, because the payment stays inside Bank X. Total M1 is unchanged.",
+        "tag": "➡️ No M1 Change", "tag_type": "blue",
+        "choice_type": "transfer_same",
+        "training_amt": 50,
+        "sim_opts": [20, 50, 80, 100],
+        "sim_label": "How much does Customer A send to Customer C?",
+        "involved": ["BankX", "CustomerA", "CustomerC"],
     },
     {
-        "id": 7, "emoji": "📉",
-        "title": "Customer A Repays Part of the Loan — Money is Destroyed",
-        "short": "Repaying a loan is the exact mirror of credit creation — money vanishes.",
-        "insight": "When Customer A repays, <strong>both sides shrink simultaneously</strong>: the Loan (asset) and the Deposit (liability) are unwound by the same amount. Money is destroyed. The economy's purchasing power contracts. This is why debt deflation is deflationary — it literally removes money from existence.",
-        "tag": "🔴 Money Destroyed", "tag_type": "red",
-        "choice_type": "repay",
-        "training_amt": 60,
-        "sim_opts": [20, 60, 80, 100],
-        "sim_label": "How much does Customer A repay to Bank X?",
-        "involved": ["BankX", "CustomerA"],
+        "id": 6, "emoji": "⚡",
+        "title": "Customer B Sends Money to Customer A — Interbank Reserve Transfer",
+        "short": "Customer B pays Customer A. The payment crosses from Bank Y to Bank X, so reserves must move.",
+        "insight": "This is an <strong>interbank transfer</strong>. Customer B's deposit at Bank Y falls and Customer A's deposit at Bank X rises. To settle the payment, Bank Y transfers reserves to Bank X through the Central Bank. Total M1 is unchanged, but reserves shift between banks.",
+        "tag": "➡️ No M1 Change", "tag_type": "blue",
+        "choice_type": "transfer_interbank",
+        "training_amt": 70,
+        "sim_opts": [30, 70, 100, 130],
+        "sim_label": "How much does Customer B send to Customer A?",
+        "involved": ["BankX", "BankY", "CentralBank", "CustomerA", "CustomerB"],
     },
     {
-        "id": 8, "emoji": "🎓",
-        "title": "Full Cycle Review",
-        "short": "You completed the full monetary circuit — from creation to destruction.",
-        "insight": "Banks create money when they lend and destroy it when loans are repaid. Reserves only matter for settlement between banks — not for creation itself. Cash is just a format swap. The Central Bank controls reserves; commercial banks control deposits. Your choices shaped the final money supply.",
+        "id": 7, "emoji": "🎓",
+        "title": "Reserve Transfer Review",
+        "short": "Review the difference between same-bank deposit transfers and interbank reserve settlement.",
+        "insight": "Same-bank transfers only rearrange deposit liabilities inside one bank. Interbank transfers require reserve settlement between banks. Loans create deposits; transfers move deposits; reserves settle payments across banks.",
         "tag": "🎓 Complete!", "tag_type": "green",
         "choice_type": "none",
         "training_amt": 0,
@@ -363,15 +351,16 @@ SCENARIOS = [
 
 # ─── ENTITIES ─────────────────────────────────────────────────────────────────
 ENTITY_DEFS = {
-    "BankX":       {"label": "Bank X",       "assets": {"Loans":0,"Reserves":0,"Cash":0},    "liabilities": {"CustADep":0,"DueCB":0}},
+    "BankX":       {"label": "Bank X",       "assets": {"Loans":0,"Reserves":0,"Cash":0},    "liabilities": {"CustADep":0,"CustCDep":0,"DueCB":0}},
     "BankY":       {"label": "Bank Y",       "assets": {"Loans":0,"Reserves":0,"Cash":0},    "liabilities": {"CustBDep":0,"DueCB":0}},
     "CentralBank": {"label": "Central Bank", "assets": {"LoansToBanks":0},                   "liabilities": {"Reserves":0,"Cash":0}},
     "CustomerA":   {"label": "Customer A",   "assets": {"Deposits":0,"Cash":0},              "liabilities": {"Loans":0}},
     "CustomerB":   {"label": "Customer B",   "assets": {"Deposits":0,"Cash":0},              "liabilities": {"Loans":0}},
+    "CustomerC":   {"label": "Customer C",   "assets": {"Deposits":0,"Cash":0},              "liabilities": {"Loans":0}},
 }
-ENTITY_ORDER = ["BankX","BankY","CentralBank","CustomerA","CustomerB"]
+ENTITY_ORDER = ["BankX","BankY","CentralBank","CustomerA","CustomerB","CustomerC"]
 FRIENDLY = {
-    "CustADep":"Cust A Dep","CustBDep":"Cust B Dep",
+    "CustADep":"Cust A Dep","CustBDep":"Cust B Dep","CustCDep":"Cust C Dep",
     "DueCB":"Due to CB","LoansToBanks":"Loans→Banks",
 }
 def fname(k): return FRIENDLY.get(k, k)
@@ -393,74 +382,75 @@ def apply_tx(state, txs):
 
 def compute_ms(state):
     bank_deps = (state["BankX"]["liabilities"].get("CustADep",0)
+               + state["BankX"]["liabilities"].get("CustCDep",0)
                + state["BankY"]["liabilities"].get("CustBDep",0))
     cash = (state["CustomerA"]["assets"].get("Cash",0)
-          + state["CustomerB"]["assets"].get("Cash",0))
+          + state["CustomerB"]["assets"].get("Cash",0)
+          + state["CustomerC"]["assets"].get("Cash",0))
     return bank_deps, cash, bank_deps + cash
 
 # ─── TRANSACTION BUILDERS ─────────────────────────────────────────────────────
 def build_transactions(sc_id, amt):
     if sc_id == 1:
+        # Bank X creates a loan for Customer A.
         return [
             ("BankX","debit","Loans",amt), ("BankX","credit","CustADep",amt),
             ("CustomerA","debit","Deposits",amt), ("CustomerA","credit","Loans",amt),
         ]
     elif sc_id == 2:
+        # Bank Y creates a loan for Customer B.
+        return [
+            ("BankY","debit","Loans",amt), ("BankY","credit","CustBDep",amt),
+            ("CustomerB","debit","Deposits",amt), ("CustomerB","credit","Loans",amt),
+        ]
+    elif sc_id == 3:
+        # Bank X creates a loan for Customer C.
+        return [
+            ("BankX","debit","Loans",amt), ("BankX","credit","CustCDep",amt),
+            ("CustomerC","debit","Deposits",amt), ("CustomerC","credit","Loans",amt),
+        ]
+    elif sc_id == 4:
+        # Central Bank provides reserves to both banks.
         return [
             ("BankX","debit","Reserves",amt), ("BankX","credit","DueCB",amt),
             ("BankY","debit","Reserves",amt), ("BankY","credit","DueCB",amt),
             ("CentralBank","debit","LoansToBanks",amt*2), ("CentralBank","credit","Reserves",amt*2),
         ]
-    elif sc_id == 3:
-        return [
-            ("BankY","debit","Loans",amt), ("BankY","credit","CustBDep",amt),
-            ("CustomerB","debit","Deposits",amt), ("CustomerB","credit","Loans",amt),
-        ]
-    elif sc_id == 4:
-        return [
-            ("BankX","debit","CustADep",amt), ("BankX","credit","Reserves",amt),
-            ("BankY","debit","Reserves",amt), ("BankY","credit","CustBDep",amt),
-            ("CustomerA","debit","Loans",amt), ("CustomerA","credit","Deposits",amt),
-            ("CustomerB","debit","Deposits",amt),
-        ]
     elif sc_id == 5:
+        # Customer A pays Customer C inside Bank X: deposits shift, no reserves move.
         return [
-            ("BankX","debit","Cash",amt), ("BankX","credit","Reserves",amt),
-            ("BankY","debit","Cash",amt), ("BankY","credit","Reserves",amt),
-            ("CentralBank","debit","Reserves",amt*2), ("CentralBank","credit","Cash",amt*2),
+            ("BankX","debit","CustADep",amt), ("BankX","credit","CustCDep",amt),
+            ("CustomerA","credit","Deposits",amt),
+            ("CustomerC","debit","Deposits",amt),
         ]
     elif sc_id == 6:
+        # Customer B pays Customer A across banks: deposits shift and reserves settle.
         return [
-            ("BankX","debit","CustADep",amt), ("BankX","credit","Cash",amt),
-            ("BankY","debit","CustBDep",amt), ("BankY","credit","Cash",amt),
-            ("CustomerA","debit","Cash",amt), ("CustomerA","credit","Deposits",amt),
-            ("CustomerB","debit","Cash",amt), ("CustomerB","credit","Deposits",amt),
-        ]
-    elif sc_id == 7:
-        return [
-            ("BankX","debit","CustADep",amt), ("BankX","credit","Loans",amt),
-            ("CustomerA","debit","Loans",amt), ("CustomerA","credit","Deposits",amt),
+            ("BankY","debit","CustBDep",amt), ("BankY","credit","Reserves",amt),
+            ("BankX","debit","Reserves",amt), ("BankX","credit","CustADep",amt),
+            ("CustomerB","credit","Deposits",amt),
+            ("CustomerA","debit","Deposits",amt),
         ]
     return []
 
 # ─── FLOW BUILDER ─────────────────────────────────────────────────────────────
 BX  = {"id":"BankX",      "label":"Bank X",      "abbr":"BX", "bg":"#E6F1FB","border":"#378ADD","color":"#185FA5"}
 BY  = {"id":"BankY",      "label":"Bank Y",      "abbr":"BY", "bg":"#EAF3DE","border":"#1D9E75","color":"#3B6D11"}
-CB  = {"id":"CentralBank","label":"Central Bank","abbr":"CB", "bg":"#E1F5EE","border":"#1D9E75","color":"#0F6E56"}
-CA  = {"id":"CustomerA",  "label":"Customer A",  "abbr":"CA", "bg":"#FAEEDA","border":"#EF9F27","color":"#854F0B"}
-CBb = {"id":"CustomerB",  "label":"Customer B",  "abbr":"CB", "bg":"#FBEAF0","border":"#D4537E","color":"#72243E"}
+CB  = {"id":"CentralBank","label":"Central Bank","abbr":"FED", "bg":"#E1F5EE","border":"#1D9E75","color":"#0F6E56"}
+CA  = {"id":"CustomerA",  "label":"Customer A",  "abbr":"A", "bg":"#FAEEDA","border":"#EF9F27","color":"#854F0B"}
+CUSTB = {"id":"CustomerB",  "label":"Customer B",  "abbr":"B", "bg":"#FBEAF0","border":"#D4537E","color":"#72243E"}
+CC  = {"id":"CustomerC",  "label":"Customer C",  "abbr":"C", "bg":"#F3E8FF","border":"#A855F7","color":"#581C87"}
 
 def arr(amt, note): return {"arrow":True,"amt":amt,"note":note}
 
 def build_flow(sc_id, amt):
     a = f"${amt}"
     if sc_id == 1: return [BX, arr(f"{a} loan","creates ↗"), CA]
-    elif sc_id == 2: return [CB, arr(f"{a} each","reserves"), BX, BY]
-    elif sc_id == 3: return [BY, arr(f"{a} loan","creates ↗"), CBb]
-    elif sc_id == 4: return [CA, BX, arr(f"{a} reserves","via CB"), CB, arr(f"{a} reserves","settled"), BY, CBb]
-    elif sc_id == 5: return [CB, arr(f"{a} each","cash"), BX, BY]
-    elif sc_id == 6: return [BX, arr(f"{a} cash","CA"), CA, BY, arr(f"{a} cash","CB"), CBb]
-    elif sc_id == 7: return [CA, arr(f"{a} repay","destroys ↘"), BX]
+    elif sc_id == 2: return [BY, arr(f"{a} loan","creates ↗"), CUSTB]
+    elif sc_id == 3: return [BX, arr(f"{a} loan","creates ↗"), CC]
+    elif sc_id == 4: return [CB, arr(f"{a} each","reserves"), BX, BY]
+    elif sc_id == 5: return [CA, arr(f"{a} deposit","inside BX"), BX, arr(f"{a} deposit","same bank"), CC]
+    elif sc_id == 6: return [CUSTB, BY, arr(f"{a} reserves","via FED"), CB, arr(f"{a} reserves","settled"), BX, CA]
     return []
 
 # ─── RENDER HELPERS ───────────────────────────────────────────────────────────
@@ -582,9 +572,9 @@ if st.session_state[ss("mode")] is None:
     st.markdown("<div style='height:2rem'></div>", unsafe_allow_html=True)
     st.markdown("""
         <div style='text-align:center;margin-bottom:2rem;'>
-            <div style='font-size:2rem;font-weight:800;color:#1E1B4B;'>🏦 Credit Creation</div>
+            <div style='font-size:2rem;font-weight:800;color:#1E1B4B;'>🏦 Reserve Transfer</div>
             <div style='font-size:1rem;color:#6b6b6b;margin-top:6px;'>
-                From loan to cash withdrawal — the full monetary circuit
+                From loan creation to same-bank and interbank reserve settlement
             </div>
         </div>
     """, unsafe_allow_html=True)
@@ -633,7 +623,7 @@ IS_TRAINING = mode == "training"
 if mode is not None:
     col_nav_home, col_nav_spacer = st.columns([1, 5])
     with col_nav_home:
-        if st.button("← Back to Credit Creation", use_container_width=True, type="secondary"):
+        if st.button("← Back to Reserve Transfer", use_container_width=True, type="secondary"):
             reset()
             st.switch_page("03_Banks.py")
 
@@ -693,7 +683,7 @@ if step_i >= len(SCENARIOS):
         '<div class="complete-card"><div style="font-size:48px;margin-bottom:8px;">🎓</div>'
         '<div style="font-size:22px;font-weight:800;color:#065F46;margin-bottom:6px;">Full Cycle Complete!</div>'
         '<div style="font-size:14px;color:#047857;line-height:1.6;">'
-        'You traced money from creation to destruction — loans, reserves, cash, repayment. All accounted for.'
+        'You traced loan creation, same-bank deposit transfer, and interbank reserve settlement. All accounted for.'
         '</div></div>',
         unsafe_allow_html=True
     )
