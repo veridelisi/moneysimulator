@@ -518,7 +518,7 @@ if st.session_state[ss("mode")] is None:
     st.markdown("<div style='height:2rem'></div>", unsafe_allow_html=True)
     st.markdown("""
         <div style='text-align:center;margin-bottom:2rem;'>
-            <div style='font-size:2rem;font-weight:800;color:#1E1B4B;'>🏦 Credit Creation</div>
+            <div style='font-size:2rem;font-weight:800;color:#1E1B4B;'>🏦 Banks & Reserves</div>
             <div style='font-size:1rem;color:#6b6b6b;margin-top:6px;'>
                 From loan to interbank settlement — the full monetary circuit
             </div>
@@ -569,9 +569,9 @@ IS_TRAINING = mode == "training"
 if mode is not None:
     col_nav_home, col_nav_spacer = st.columns([1, 5])
     with col_nav_home:
-        if st.button("← Back to Credit Creation", use_container_width=True, type="secondary"):
+        if st.button("← Back to Banks & Reserves", use_container_width=True, type="secondary"):
             reset()
-            st.switch_page("03_Banks.py")
+            st.switch_page("03_BanksReserves.py")
 
 with st.sidebar:
     if st.button("← Back to Home", use_container_width=True):
