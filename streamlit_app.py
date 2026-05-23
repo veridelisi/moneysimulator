@@ -212,14 +212,25 @@ FED = [
 
 TREASURY = [
     [
-        dict(icon="📜", badge="Issue",   title="Bond Issuance",
-             desc="How Treasury auctions drain bank reserves.", key="tsy_issuance"),
-        dict(icon="🏛️", badge="TGA",    title="TGA Drawdown",
-             desc="Government spending injects reserves back.", key="tsy_tga"),
-        dict(icon="💵", badge="Bills",   title="T-Bill Rollover",
-             desc="Short-term bill rollover and reserve impact.", key="tsy_bills"),
-        dict(icon="📊", badge="Deficit", title="Deficit Financing",
-             desc="Borrowing to fund a deficit affects reserves.", key="tsy_deficit"),
+        dict(icon="📜", badge="Issue", title="Treasury Bond Issuance",
+             desc="How Treasury auctions drain reserves into the TGA.",
+             key="tsy_issuance",
+             page="pages/04_TreasuryIssuance.py"),
+
+        dict(icon="🏛️", badge="Spend", title="TGA Drawdown",
+             desc="How government spending injects reserves and deposits.",
+             key="tsy_tga",
+             page="pages/04_TreasuryTGA.py"),
+
+        dict(icon="🧾", badge="Tax", title="Tax Payment",
+             desc="How tax payments reduce deposits and refill the TGA.",
+             key="tsy_tax",
+             page="pages/04_TreasuryTax.py"),
+
+        dict(icon="🔁", badge="Cycle", title="Deficit Spending Cycle",
+             desc="Issuance, spending, and the net reserve effect.",
+             key="tsy_deficit",
+             page="pages/04_TreasuryDeficit.py"),
     ],
 ]
 
