@@ -40,10 +40,12 @@ html, body, [class*="css"], .stApp {
 /* Sidebar button */
 section[data-testid="stSidebar"] div[data-testid="stButton"] > button {
     min-height: 54px !important;
-    padding: 10px 12px !important;
+    padding: 10px 16px !important;
     white-space: pre-line !important;
     line-height: 1.15 !important;
     font-size: 14px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
 }
 
 /* Sidebar metrics */
