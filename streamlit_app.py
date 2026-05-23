@@ -243,7 +243,7 @@ BANKS = [
         dict(icon="📋", badge="Capital", title="Capital Requirements",
              desc="How regulatory ratios constrain credit expansion.",
              key="bnk_capital",
-             page="pages/banks_capital_requirements.py"),
+             page="pages/03_BanksCapital.py"),
     ],
 ]
 
