@@ -189,24 +189,46 @@ def render_rows(rows, header_cls):
 # ══════════════════════════════════════════════════════════════════════════════
 FED = [
     [
-        dict(icon="🖨️", badge="QE",   title="Quantitative Easing",
-             desc="How the Fed buys bonds and creates reserves.", key="fed_qe"),
-        dict(icon="🔄", badge="OMO",  title="Open Market Ops",
-             desc="Day-to-day reserve injection via T-bill purchases.", key="fed_omo"),
+        dict(icon="🖨️", badge="QE", title="Quantitative Easing",
+             desc="How the Fed buys bonds and creates reserves.",
+             key="fed_qe",
+             page="pages/02_FedQE.py"),
+
+        dict(icon="🔄", badge="OMO", title="Open Market Ops",
+             desc="Day-to-day reserve injection via T-bill purchases.",
+             key="fed_omo",
+             page="pages/02_FedOMO.py"),
+
         dict(icon="🏦", badge="Repo", title="Repo Facility",
-             desc="Overnight collateralized lending to primary dealers.", key="fed_repo"),
-        dict(icon="↩️", badge="RRP",  title="Reverse Repo",
-             desc="Draining excess liquidity through overnight RRPs.", key="fed_rrp"),
+             desc="Overnight collateralized lending to primary dealers.",
+             key="fed_repo",
+             page="pages/02_FedRepo.py"),
+
+        dict(icon="↩️", badge="RRP", title="Reverse Repo",
+             desc="Draining excess liquidity through overnight RRPs.",
+             key="fed_rrp",
+             page="pages/02_FedRRP.py"),
     ],
     [
-        dict(icon="📉", badge="QT",   title="Quantitative Tightening",
-             desc="Balance sheet runoff and its effect on reserves.", key="fed_qt"),
-        dict(icon="💳", badge="IOR",  title="Interest on Reserves",
-             desc="How IORB sets the floor for the fed funds rate.", key="fed_ior"),
+        dict(icon="📉", badge="QT", title="Quantitative Tightening",
+             desc="Balance sheet runoff and its effect on reserves.",
+             key="fed_qt",
+             page="pages/02_FedQT.py"),
+
+        dict(icon="💳", badge="IOR", title="Interest on Reserves",
+             desc="How IORB sets the floor for the fed funds rate.",
+             key="fed_ior",
+             page="pages/02_FedIOR.py"),
+
         dict(icon="🆘", badge="LOLR", title="Lender of Last Resort",
-             desc="Emergency discount window lending under stress.", key="fed_lolr"),
+             desc="Emergency discount window lending under stress.",
+             key="fed_lolr",
+             page="pages/02_FedLOLR.py"),
+
         dict(icon="🌐", badge="Swap", title="FX Swap Lines",
-             desc="Dollar liquidity to foreign central banks.", key="fed_swap"),
+             desc="Dollar liquidity to foreign central banks.",
+             key="fed_swap",
+             page="pages/02_FedSwap.py"),
     ],
 ]
 
