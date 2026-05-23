@@ -334,6 +334,6 @@ st.markdown("""
         and banking system operations through accounting entries and flow diagrams.
     </div>
     <a href="https://veridelisi.substack.com/">📰 Veri Delisi Substack</a>
-    <div class="footer-by">Created by <strong>Engin Yılmaz</strong> • 2025</div>
+    <div class="footer-by">Created by <strong>Engin Yılmaz</strong> • 2026</div>
 </div>
 """, unsafe_allow_html=True)
