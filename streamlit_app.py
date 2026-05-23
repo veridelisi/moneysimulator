@@ -283,13 +283,24 @@ BANKS = [
 COMBINED = [
     [
         dict(icon="⚡", badge="QE+Bond", title="QE & Bond Issuance",
-             desc="Fed buys what Treasury issues — net reserve effect.", key="cmb_qe"),
-        dict(icon="🔁", badge="Fiscal",  title="Fiscal + Monetary",
-             desc="Deficit spending financed by QE.", key="cmb_fiscal"),
-        dict(icon="🌊", badge="Crisis",  title="Crisis Playbook",
-             desc="2008 & 2020: LOLR + QE + fiscal stimulus.", key="cmb_crisis"),
-        dict(icon="🔜", badge="Soon",    title="Coming Soon",
-             desc="More combined scenarios in progress.", key="cmb_soon"),
+             desc="Fed buys what Treasury issues — net reserve effect.",
+             key="cmb_qe",
+             page="pages/05_QE_BondIssuance.py"),
+
+        dict(icon="🔁", badge="Fiscal", title="Fiscal + Monetary",
+             desc="Deficit spending financed by QE.",
+             key="cmb_fiscal",
+             page="pages/05_FiscalMonetary.py"),
+
+        dict(icon="🌊", badge="Crisis", title="Crisis Playbook",
+             desc="2008 & 2020: LOLR + QE + fiscal stimulus.",
+             key="cmb_crisis",
+             page="pages/05_CrisisPlaybook.py"),
+
+        dict(icon="🔜", badge="Soon", title="Coming Soon",
+             desc="More combined scenarios in progress.",
+             key="cmb_soon",
+             page="pages/05_ComingSoon.py"),
     ],
 ]
 
