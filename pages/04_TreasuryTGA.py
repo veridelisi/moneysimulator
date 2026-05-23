@@ -1089,11 +1089,12 @@ if mode is not None:
     col_nav_home, col_nav_spacer = st.columns([2.4, 5.6])
 
     with col_nav_home:
-        if st.button("← Back\nto Treasury", use_container_width=True, type="secondary"):
+        
+        if st.button("← Back\nto Treasury DrawDown", use_container_width=True, type="secondary"):
             reset()
             st.switch_page("streamlit_app.py")
 
-            
+
 
 with st.sidebar:
     if st.button("← Back\nto Home", use_container_width=True):
