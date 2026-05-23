@@ -1268,70 +1268,69 @@ if step_i >= len(SCENARIOS):
 
     m = compute_metrics(st.session_state[ss("ledger")])
 
-c1, c2, c3, c4 = st.columns(4)
+    c1, c2, c3, c4 = st.columns(4)
 
-with c1:
-    st.metric("Final Reserves", f"${m['bank_reserves']}")
+    with c1:
+        st.metric("Final Reserves", f"${m['bank_reserves']}")
 
-with c2:
-    st.metric("Final TGA", f"${m['tga']}")
+    with c2:
+        st.metric("Final TGA", f"${m['tga']}")
 
-with c3:
-    st.metric("Securities Issued", f"${m['securities']}")
+    with c3:
+        st.metric("Securities Issued", f"${m['securities']}")
 
-with c4:
-    net = m["net_reserve_effect"]
+    with c4:
+        net = m["net_reserve_effect"]
 
-    if net > 0:
-        net_text = f"Reserve injection: +${net}"
-        net_color = "#15803D"
-        net_bg = "#DCFCE7"
-    elif net < 0:
-        net_text = f"Reserve drain: -${abs(net)}"
-        net_color = "#B91C1C"
-        net_bg = "#FEE2E2"
-    else:
-        net_text = "Neutral: $0"
-        net_color = "#475569"
-        net_bg = "#F1F5F9"
+        if net > 0:
+            net_text = f"Reserve injection: +${net}"
+            net_color = "#15803D"
+            net_bg = "#DCFCE7"
+        elif net < 0:
+            net_text = f"Reserve drain: -${abs(net)}"
+            net_color = "#B91C1C"
+            net_bg = "#FEE2E2"
+        else:
+            net_text = "Neutral: $0"
+            net_color = "#475569"
+            net_bg = "#F1F5F9"
 
-    st.markdown(
-        f"""
-        <div style="
-            background:{net_bg};
-            border:1px solid rgba(0,0,0,0.08);
-            border-radius:12px;
-            padding:14px 16px;
-            min-height:86px;
-        ">
+        st.markdown(
+            f"""
             <div style="
-                font-size:13px;
-                color:#374151;
-                font-weight:600;
-                margin-bottom:8px;
+                background:{net_bg};
+                border:1px solid rgba(0,0,0,0.08);
+                border-radius:12px;
+                padding:14px 16px;
+                min-height:86px;
             ">
-                Net Reserve Effect
+                <div style="
+                    font-size:13px;
+                    color:#374151;
+                    font-weight:600;
+                    margin-bottom:8px;
+                ">
+                    Net Reserve Effect
+                </div>
+                <div style="
+                    font-size:22px;
+                    line-height:1.2;
+                    color:{net_color};
+                    font-weight:800;
+                    white-space:normal;
+                    word-break:break-word;
+                ">
+                    {net_text}
+                </div>
             </div>
-            <div style="
-                font-size:22px;
-                line-height:1.2;
-                color:{net_color};
-                font-weight:800;
-                white-space:normal;
-                word-break:break-word;
-            ">
-                {net_text}
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+            """,
+            unsafe_allow_html=True
+        )
 
     if st.button("↺ Play Again", type="primary", use_container_width=True):
         reset()
 
     st.stop()
-
 # ─────────────────────────────────────────────────────────────────────────────
 # STEP HEADER
 # ─────────────────────────────────────────────────────────────────────────────
@@ -1443,6 +1442,15 @@ with col_main:
             render_monitor(st.session_state[ss("ledger")])
             render_step_balance_sheets(st.session_state[ss("ledger")], sc["involved"])
 
+     else:
+        # ── SIMULATION MODE ──
+        if already_confirmed:
+            render_monitor(st.session_state[ss("ledger")])
+            render_step_balance_sheets(
+                st.session_state[ss("ledger")],
+                sc["involved"]
+            )
+
         else:
             st.markdown(
                 f'<div class="choice-prompt">'
@@ -1452,21 +1460,49 @@ with col_main:
                 unsafe_allow_html=True
             )
 
-            btn_cols = st.columns(len(sc["sim_opts"]))
+            current_state = st.session_state[ss("ledger")]
 
-            for idx, opt in enumerate(sc["sim_opts"]):
-                with btn_cols[idx]:
-                    is_sel = st.session_state[ss("chosen")].get(step_i) == opt
+            # Dynamic options:
+            # Issuance options are limited by investor deposits and bank reserves.
+            # Spending options are limited by current TGA.
+            available_opts = sc["sim_opts"]
 
-                    if st.button(
-                        f"${opt}",
-                        key=f"tsy_deficit_opt_{step_i}_{opt}",
-                        type="primary" if is_sel else "secondary",
-                        use_container_width=True
-                    ):
-                        st.session_state[ss("chosen")][step_i] = opt
-                        st.session_state[ss("blocked_msg")] = None
-                        st.rerun()
+            if sc["choice_type"] == "issuance":
+                capacity = get_issuance_capacity(current_state)
+                available_opts = [x for x in sc["sim_opts"] if x <= capacity]
+
+                if not available_opts and capacity > 0:
+                    available_opts = [capacity]
+
+            elif sc["choice_type"] == "spending":
+                capacity = get_spending_capacity(current_state)
+                available_opts = [x for x in sc["sim_opts"] if x <= capacity]
+
+                if not available_opts and capacity > 0:
+                    available_opts = [capacity]
+
+            if not available_opts:
+                st.markdown(
+                    '<div class="warning-bar">❌ No valid amount is available for this step. The transaction cannot settle.</div>',
+                    unsafe_allow_html=True
+                )
+
+            else:
+                btn_cols = st.columns(len(available_opts))
+
+                for idx, opt in enumerate(available_opts):
+                    with btn_cols[idx]:
+                        is_sel = st.session_state[ss("chosen")].get(step_i) == opt
+
+                        if st.button(
+                            f"${opt}",
+                            key=f"tsy_deficit_opt_{step_i}_{opt}",
+                            type="primary" if is_sel else "secondary",
+                            use_container_width=True
+                        ):
+                            st.session_state[ss("chosen")][step_i] = opt
+                            st.session_state[ss("blocked_msg")] = None
+                            st.rerun()
 
             chosen_amt = st.session_state[ss("chosen")].get(step_i)
 
@@ -1480,13 +1516,23 @@ with col_main:
                 if sc["choice_type"] == "issuance":
                     projected_reserves = current_reserves - chosen_amt
                     projected_tga = current_tga + chosen_amt
-                    action_label = "Projected Issuance Test"
+                    action_label = "Projected Treasury Issuance"
                     capacity = get_issuance_capacity(current_state)
-                else:
+                    confirm_label = "Treasury Issuance"
+
+                elif sc["choice_type"] == "spending":
                     projected_reserves = current_reserves + chosen_amt
                     projected_tga = current_tga - chosen_amt
-                    action_label = "Projected Spending Test"
+                    action_label = "Projected Government Spending"
                     capacity = get_spending_capacity(current_state)
+                    confirm_label = "Government Spending"
+
+                else:
+                    projected_reserves = current_reserves
+                    projected_tga = current_tga
+                    action_label = "Projected Transaction"
+                    capacity = 0
+                    confirm_label = "Transaction"
 
                 projected_net = projected_reserves - 500
 
@@ -1500,7 +1546,7 @@ with col_main:
                                 <div class="monitor-val">${chosen_amt}</div>
                             </div>
                             <div class="monitor-box">
-                                <div class="monitor-label">Capacity</div>
+                                <div class="monitor-label">Available Capacity</div>
                                 <div class="monitor-val">${capacity}</div>
                             </div>
                             <div class="monitor-box">
@@ -1528,29 +1574,29 @@ with col_main:
                         unsafe_allow_html=True
                     )
 
-                confirm_label = "Treasury Issuance" if sc["choice_type"] == "issuance" else "Government Spending"
-
                 if st.button(
                     f"✓ Confirm ${chosen_amt} {confirm_label}",
                     key=f"tsy_deficit_confirm_{step_i}",
                     type="primary",
                     use_container_width=True
                 ):
-                    if sc["choice_type"] == "issuance" and not issuance_allowed(current_state, chosen_amt):
-                        cap = get_issuance_capacity(current_state)
-                        st.session_state[ss("blocked_msg")] = (
-                            f"❌ Issuance blocked. Treasury tries to issue ${chosen_amt}, "
-                            f"but settlement capacity is only ${cap}. The balance sheet is unchanged."
-                        )
-                        st.rerun()
+                    if sc["choice_type"] == "issuance":
+                        if not issuance_allowed(current_state, chosen_amt):
+                            cap = get_issuance_capacity(current_state)
+                            st.session_state[ss("blocked_msg")] = (
+                                f"❌ Issuance blocked. Treasury tries to issue ${chosen_amt}, "
+                                f"but settlement capacity is only ${cap}. The balance sheet is unchanged."
+                            )
+                            st.rerun()
 
-                    if sc["choice_type"] == "spending" and not spending_allowed(current_state, chosen_amt):
-                        cap = get_spending_capacity(current_state)
-                        st.session_state[ss("blocked_msg")] = (
-                            f"❌ Spending blocked. Treasury tries to spend ${chosen_amt}, "
-                            f"but the TGA balance is only ${cap}. The balance sheet is unchanged."
-                        )
-                        st.rerun()
+                    elif sc["choice_type"] == "spending":
+                        if not spending_allowed(current_state, chosen_amt):
+                            cap = get_spending_capacity(current_state)
+                            st.session_state[ss("blocked_msg")] = (
+                                f"❌ Spending blocked. Treasury tries to spend ${chosen_amt}, "
+                                f"but the TGA balance is only ${cap}. The balance sheet is unchanged."
+                            )
+                            st.rerun()
 
                     txs = build_transactions(sc["id"], chosen_amt)
                     new_ledger = apply_tx(current_state, txs)
