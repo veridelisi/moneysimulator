@@ -588,7 +588,7 @@ if mode is not None:
     with col_nav_home:
         if st.button("← Back to Banks and Cash ", use_container_width=True, type="secondary"):
             reset()
-            st.switch_page("03_Banks.py")
+            st.switch_page("03_BanksCash.py")
 
 with st.sidebar:
     if st.button("← Back to Home", use_container_width=True):
