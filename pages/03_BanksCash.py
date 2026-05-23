@@ -3,7 +3,7 @@ import plotly.graph_objects as go
 from copy import deepcopy
 
 st.set_page_config(
-    page_title="Withdrawal Mechanics · MoneySimulator",
+    page_title="Banks and Cash  · MoneySimulator",
     page_icon="🏦",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -535,7 +535,7 @@ if st.session_state[ss("mode")] is None:
     st.markdown("<div style='height:2rem'></div>", unsafe_allow_html=True)
     st.markdown("""
         <div style='text-align:center;margin-bottom:2rem;'>
-            <div style='font-size:2rem;font-weight:800;color:#1E1B4B;'>🏦 Credit Creation</div>
+            <div style='font-size:2rem;font-weight:800;color:#1E1B4B;'>🏦 Banks and Cash </div>
             <div style='font-size:1rem;color:#6b6b6b;margin-top:6px;'>
                 Withdrawal mechanics and reserve drain — from bank deposit to physical cash
             </div>
@@ -586,7 +586,7 @@ IS_TRAINING = mode == "training"
 if mode is not None:
     col_nav_home, col_nav_spacer = st.columns([1, 5])
     with col_nav_home:
-        if st.button("← Back to Credit Creation", use_container_width=True, type="secondary"):
+        if st.button("← Back to Banks and Cash ", use_container_width=True, type="secondary"):
             reset()
             st.switch_page("03_Banks.py")
 
