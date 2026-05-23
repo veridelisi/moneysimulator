@@ -1268,19 +1268,64 @@ if step_i >= len(SCENARIOS):
 
     m = compute_metrics(st.session_state[ss("ledger")])
 
-    c1, c2, c3, c4 = st.columns(4)
+c1, c2, c3, c4 = st.columns(4)
 
-    with c1:
-        st.metric("Final Reserves", f"${m['bank_reserves']}")
+with c1:
+    st.metric("Final Reserves", f"${m['bank_reserves']}")
 
-    with c2:
-        st.metric("Final TGA", f"${m['tga']}")
+with c2:
+    st.metric("Final TGA", f"${m['tga']}")
 
-    with c3:
-        st.metric("Securities Issued", f"${m['securities']}")
+with c3:
+    st.metric("Securities Issued", f"${m['securities']}")
 
-    with c4:
-        st.metric("Net Reserve Effect", net_effect_label(m["net_reserve_effect"]))
+with c4:
+    net = m["net_reserve_effect"]
+
+    if net > 0:
+        net_text = f"Reserve injection: +${net}"
+        net_color = "#15803D"
+        net_bg = "#DCFCE7"
+    elif net < 0:
+        net_text = f"Reserve drain: -${abs(net)}"
+        net_color = "#B91C1C"
+        net_bg = "#FEE2E2"
+    else:
+        net_text = "Neutral: $0"
+        net_color = "#475569"
+        net_bg = "#F1F5F9"
+
+    st.markdown(
+        f"""
+        <div style="
+            background:{net_bg};
+            border:1px solid rgba(0,0,0,0.08);
+            border-radius:12px;
+            padding:14px 16px;
+            min-height:86px;
+        ">
+            <div style="
+                font-size:13px;
+                color:#374151;
+                font-weight:600;
+                margin-bottom:8px;
+            ">
+                Net Reserve Effect
+            </div>
+            <div style="
+                font-size:22px;
+                line-height:1.2;
+                color:{net_color};
+                font-weight:800;
+                white-space:normal;
+                word-break:break-word;
+            ">
+                {net_text}
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
     if st.button("↺ Play Again", type="primary", use_container_width=True):
         reset()
