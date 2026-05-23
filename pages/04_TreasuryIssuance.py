@@ -1159,12 +1159,11 @@ sc = SCENARIOS[min(step_i, len(SCENARIOS) - 1)]
 IS_TRAINING = mode == "training"
 
 if mode is not None:
-    col_nav_home, col_nav_spacer = st.columns([1.6, 3.2])
+    col_nav_home, col_nav_spacer = st.columns([1, 5])
     with col_nav_home:
         if st.button("← Back to Treasury", use_container_width=True, type="secondary"):
             reset()
             st.switch_page("streamlit_app.py")
-
 with st.sidebar:
     if st.button("← Back to Home", use_container_width=True):
         st.switch_page("streamlit_app.py")
@@ -1310,7 +1309,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-col_main, col_chart = st.columns([3, 2])
+col_main = st.container()
 
 with col_main:
     already_confirmed = step_i in st.session_state[ss("confirmed")]
@@ -1490,12 +1489,7 @@ with col_main:
                     unsafe_allow_html=True
                 )
 
-with col_chart:
-    st.markdown("### 📊 Reserves vs TGA")
-    st.plotly_chart(
-        reserve_tga_chart(st.session_state[ss("history")]),
-        use_container_width=True
-    )
+
 
 # ─────────────────────────────────────────────────────────────────────────────
 # NAVIGATION
