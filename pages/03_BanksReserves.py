@@ -3,7 +3,7 @@ import plotly.graph_objects as go
 from copy import deepcopy
 
 st.set_page_config(
-    page_title="Credit Creation · MoneySimulator",
+    page_title="Banks & Reserves· MoneySimulator",
     page_icon="🏦",
     layout="wide",
     initial_sidebar_state="expanded"
