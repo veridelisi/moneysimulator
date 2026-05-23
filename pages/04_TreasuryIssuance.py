@@ -1182,7 +1182,7 @@ with st.sidebar:
     if st.button("← Back to Home", use_container_width=True):
         st.switch_page("streamlit_app.py")
 
-    st.markdown("<div style='height:4px'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
 
     mode_label = "📖 Training Mode" if IS_TRAINING else "🎮 Simulation Mode"
     mode_color = "#047857" if IS_TRAINING else "#F59E0B"
