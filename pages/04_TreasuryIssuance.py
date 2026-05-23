@@ -1174,7 +1174,7 @@ if mode is not None:
     col_nav_home, col_nav_spacer = st.columns([2.4, 5.6])
 
     with col_nav_home:
-        if st.button("← Back\nto Treasury", use_container_width=True, type="secondary"):
+        if st.button("← Back\nto Treasury Issuance", use_container_width=True, type="secondary"):
             reset()
             st.switch_page("streamlit_app.py")
 
@@ -1182,7 +1182,7 @@ with st.sidebar:
     if st.button("← Back to Home", use_container_width=True):
         st.switch_page("streamlit_app.py")
 
-    st.markdown("<div style='height:6px'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height:4px'></div>", unsafe_allow_html=True)
 
     mode_label = "📖 Training Mode" if IS_TRAINING else "🎮 Simulation Mode"
     mode_color = "#047857" if IS_TRAINING else "#F59E0B"
