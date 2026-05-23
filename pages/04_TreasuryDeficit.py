@@ -559,7 +559,7 @@ SCENARIOS = [
         Treasury issuance drains reserves from the banking system into the TGA.
         Investor A swaps a bank deposit for a Treasury security.
         Bank X loses reserves and loses the matching deposit liability.
-        The Treasury receives a TGA balance and issues a security liability.
+        Treasury receives a TGA balance and issues a security liability.
         """,
         "tag": "🔻 Reserve Drain",
         "tag_type": "red",
@@ -583,7 +583,7 @@ SCENARIOS = [
         "tag_type": "green",
         "choice_type": "spending",
         "training_amt": 200,
-        "sim_opts": [100, 300, 400, 600],
+        "sim_opts": [100, 200, 300, 400, 500],
         "sim_label": "How much does Treasury spend?",
         "involved": ["Treasury", "CentralBank", "BankX", "HouseholdB"],
     },
@@ -593,7 +593,7 @@ SCENARIOS = [
         "title": "Net Reserve Effect",
         "short": "Compare reserve drain from issuance with reserve injection from spending.",
         "insight": """
-        The net reserve effect depends on the sequence and size of the operations.
+        The net reserve effect depends on the size of the operations.
         If issuance is larger than spending, reserves end lower and the TGA remains higher.
         If spending is larger than issuance, reserves end higher and the TGA falls.
         If they are equal, reserves return to the starting level.
@@ -737,10 +737,11 @@ def apply_tx(state, txs):
 # METRICS
 # ─────────────────────────────────────────────────────────────────────────────
 
+START_RESERVES = 500
+
 def compute_metrics(state):
-    start_reserves = 500
     current_reserves = state["BankX"]["assets"].get("Reserves", 0)
-    net_reserve_effect = current_reserves - start_reserves
+    net_reserve_effect = current_reserves - START_RESERVES
 
     issuance = state["Treasury"]["liabilities"].get("TreasurySecurities", 0)
     spending = state["HouseholdB"]["assets"].get("Deposits", 0)
@@ -783,38 +784,30 @@ def net_effect_label(net):
 def build_transactions(sc_id, amt):
     if sc_id == 2:
         return [
-            # Investor A buys Treasury securities.
             ("InvestorA", "credit", "Deposits", amt),
             ("InvestorA", "debit", "TreasurySecurities", amt),
 
-            # Bank X removes Investor A's deposit liability and transfers reserves.
             ("BankX", "debit", "InvestorADep", amt),
             ("BankX", "credit", "Reserves", amt),
 
-            # Central bank shifts liabilities from Bank X reserves to TGA.
             ("CentralBank", "debit", "BankXReserves", amt),
             ("CentralBank", "credit", "TGA", amt),
 
-            # Treasury receives TGA and issues securities.
             ("Treasury", "debit", "TGA", amt),
             ("Treasury", "credit", "TreasurySecurities", amt),
         ]
 
     if sc_id == 3:
         return [
-            # Treasury spends down TGA.
             ("Treasury", "credit", "TGA", amt),
             ("Treasury", "debit", "FiscalBalance", amt),
 
-            # Central bank shifts liabilities from TGA to Bank X reserves.
             ("CentralBank", "debit", "TGA", amt),
             ("CentralBank", "credit", "BankXReserves", amt),
 
-            # Bank X receives reserves and credits Household B.
             ("BankX", "debit", "Reserves", amt),
             ("BankX", "credit", "HouseholdBDep", amt),
 
-            # Household B receives deposit and net worth rises.
             ("HouseholdB", "debit", "Deposits", amt),
             ("HouseholdB", "credit", "NetWorth", amt),
         ]
@@ -927,9 +920,11 @@ def build_flow(sc_id, amt):
 
 def dots_html(current, total):
     parts = []
+
     for i in range(total):
         cls = "dot-done" if i < current else ("dot-active" if i == current else "dot-empty")
         parts.append(f'<span class="{cls}"></span>')
+
     return f'<div class="dots-row">{"".join(parts)}</div>'
 
 def flow_html(nodes):
@@ -937,6 +932,7 @@ def flow_html(nodes):
         return ""
 
     parts = []
+
     for n in nodes:
         if n.get("id"):
             parts.append(
@@ -1062,6 +1058,52 @@ def render_monitor(state):
         unsafe_allow_html=True
     )
 
+def render_net_effect_card(net):
+    if net > 0:
+        net_text = f"Reserve injection: +${net}"
+        net_color = "#15803D"
+        net_bg = "#DCFCE7"
+    elif net < 0:
+        net_text = f"Reserve drain: -${abs(net)}"
+        net_color = "#B91C1C"
+        net_bg = "#FEE2E2"
+    else:
+        net_text = "Neutral: $0"
+        net_color = "#475569"
+        net_bg = "#F1F5F9"
+
+    st.markdown(
+        f"""
+        <div style="
+            background:{net_bg};
+            border:1px solid rgba(0,0,0,0.08);
+            border-radius:12px;
+            padding:14px 16px;
+            min-height:86px;
+        ">
+            <div style="
+                font-size:13px;
+                color:#374151;
+                font-weight:600;
+                margin-bottom:8px;
+            ">
+                Net Reserve Effect
+            </div>
+            <div style="
+                font-size:22px;
+                line-height:1.2;
+                color:{net_color};
+                font-weight:800;
+                white-space:normal;
+                word-break:break-word;
+            ">
+                {net_text}
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
 # ─────────────────────────────────────────────────────────────────────────────
 # SESSION STATE
 # ─────────────────────────────────────────────────────────────────────────────
@@ -1080,6 +1122,7 @@ for key, default in [
     ("blocked_msg", None),
 ]:
     full = ss(key)
+
     if full not in st.session_state:
         st.session_state[full] = default
 
@@ -1089,8 +1132,10 @@ if st.session_state[ss("ledger")] is None:
 def reset():
     for key in ["mode", "step", "ledger", "chosen", "confirmed", "blocked_msg"]:
         full = ss(key)
+
         if full in st.session_state:
             del st.session_state[full]
+
     st.rerun()
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -1208,7 +1253,6 @@ with st.sidebar:
 
     m = compute_metrics(st.session_state[ss("ledger")])
     net = m["net_reserve_effect"]
-
     delta_cls = "delta-pos" if net > 0 else "delta-neg" if net < 0 else "delta-neu"
 
     st.markdown(
@@ -1280,57 +1324,13 @@ if step_i >= len(SCENARIOS):
         st.metric("Securities Issued", f"${m['securities']}")
 
     with c4:
-        net = m["net_reserve_effect"]
-
-        if net > 0:
-            net_text = f"Reserve injection: +${net}"
-            net_color = "#15803D"
-            net_bg = "#DCFCE7"
-        elif net < 0:
-            net_text = f"Reserve drain: -${abs(net)}"
-            net_color = "#B91C1C"
-            net_bg = "#FEE2E2"
-        else:
-            net_text = "Neutral: $0"
-            net_color = "#475569"
-            net_bg = "#F1F5F9"
-
-        st.markdown(
-            f"""
-            <div style="
-                background:{net_bg};
-                border:1px solid rgba(0,0,0,0.08);
-                border-radius:12px;
-                padding:14px 16px;
-                min-height:86px;
-            ">
-                <div style="
-                    font-size:13px;
-                    color:#374151;
-                    font-weight:600;
-                    margin-bottom:8px;
-                ">
-                    Net Reserve Effect
-                </div>
-                <div style="
-                    font-size:22px;
-                    line-height:1.2;
-                    color:{net_color};
-                    font-weight:800;
-                    white-space:normal;
-                    word-break:break-word;
-                ">
-                    {net_text}
-                </div>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
+        render_net_effect_card(m["net_reserve_effect"])
 
     if st.button("↺ Play Again", type="primary", use_container_width=True):
         reset()
 
     st.stop()
+
 # ─────────────────────────────────────────────────────────────────────────────
 # STEP HEADER
 # ─────────────────────────────────────────────────────────────────────────────
@@ -1355,6 +1355,10 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+# ─────────────────────────────────────────────────────────────────────────────
+# MAIN STEP LOGIC
+# ─────────────────────────────────────────────────────────────────────────────
+
 col_main = st.container()
 
 with col_main:
@@ -1364,6 +1368,7 @@ with col_main:
         st.markdown(f'<div class="insight-bar">💡 {sc["insight"]}</div>', unsafe_allow_html=True)
 
         flow_nodes = build_flow(sc["id"], 0)
+
         if flow_nodes:
             st.markdown(
                 f'<div class="flow-strip"><div class="flow-label">Transaction Flow</div>{flow_html(flow_nodes)}</div>',
@@ -1390,6 +1395,7 @@ with col_main:
             st.markdown(f'<div class="insight-bar">💡 {sc["insight"]}</div>', unsafe_allow_html=True)
 
             flow_nodes = build_flow(sc["id"], amt)
+
             if flow_nodes:
                 st.markdown(
                     f'<div class="flow-strip"><div class="flow-label">Transaction Flow</div>{flow_html(flow_nodes)}</div>',
@@ -1401,16 +1407,18 @@ with col_main:
             button_text = "✓ Apply Treasury Issuance and Continue" if sc["choice_type"] == "issuance" else "✓ Apply Government Spending and Continue"
 
             if st.button(f"{button_text} (${amt})", type="primary", use_container_width=True):
-                if sc["choice_type"] == "issuance" and not issuance_allowed(st.session_state[ss("ledger")], amt):
-                    cap = get_issuance_capacity(st.session_state[ss("ledger")])
+                current_state = st.session_state[ss("ledger")]
+
+                if sc["choice_type"] == "issuance" and not issuance_allowed(current_state, amt):
+                    cap = get_issuance_capacity(current_state)
                     st.session_state[ss("blocked_msg")] = (
                         f"❌ Issuance blocked. Treasury tries to issue ${amt}, "
                         f"but settlement capacity is only ${cap}."
                     )
                     st.rerun()
 
-                if sc["choice_type"] == "spending" and not spending_allowed(st.session_state[ss("ledger")], amt):
-                    cap = get_spending_capacity(st.session_state[ss("ledger")])
+                if sc["choice_type"] == "spending" and not spending_allowed(current_state, amt):
+                    cap = get_spending_capacity(current_state)
                     st.session_state[ss("blocked_msg")] = (
                         f"❌ Spending blocked. Treasury tries to spend ${amt}, "
                         f"but the TGA balance is only ${cap}."
@@ -1418,7 +1426,7 @@ with col_main:
                     st.rerun()
 
                 txs = build_transactions(sc["id"], amt)
-                new_ledger = apply_tx(st.session_state[ss("ledger")], txs)
+                new_ledger = apply_tx(current_state, txs)
 
                 st.session_state[ss("ledger")] = new_ledger
                 st.session_state[ss("chosen")][step_i] = amt
@@ -1438,18 +1446,10 @@ with col_main:
             render_step_balance_sheets(st.session_state[ss("ledger")], sc["involved"])
 
     else:
-        if already_confirmed:
-            render_monitor(st.session_state[ss("ledger")])
-            render_step_balance_sheets(st.session_state[ss("ledger")], sc["involved"])
-
-     else:
         # ── SIMULATION MODE ──
         if already_confirmed:
             render_monitor(st.session_state[ss("ledger")])
-            render_step_balance_sheets(
-                st.session_state[ss("ledger")],
-                sc["involved"]
-            )
+            render_step_balance_sheets(st.session_state[ss("ledger")], sc["involved"])
 
         else:
             st.markdown(
@@ -1462,9 +1462,6 @@ with col_main:
 
             current_state = st.session_state[ss("ledger")]
 
-            # Dynamic options:
-            # Issuance options are limited by investor deposits and bank reserves.
-            # Spending options are limited by current TGA.
             available_opts = sc["sim_opts"]
 
             if sc["choice_type"] == "issuance":
@@ -1534,7 +1531,7 @@ with col_main:
                     capacity = 0
                     confirm_label = "Transaction"
 
-                projected_net = projected_reserves - 500
+                projected_net = projected_reserves - START_RESERVES
 
                 st.markdown(
                     f"""
@@ -1568,6 +1565,7 @@ with col_main:
                 )
 
                 flow_nodes = build_flow(sc["id"], chosen_amt)
+
                 if flow_nodes:
                     st.markdown(
                         f'<div class="flow-strip"><div class="flow-label">Projected Transaction Flow</div>{flow_html(flow_nodes)}</div>',
