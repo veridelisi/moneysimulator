@@ -1074,11 +1074,26 @@ sc = SCENARIOS[min(step_i, len(SCENARIOS) - 1)]
 IS_TRAINING = mode == "training"
 
 if mode is not None:
+    st.markdown("""
+    <style>
+    div[data-testid="stHorizontalBlock"] div[data-testid="column"]:first-child button {
+        min-height: 62px !important;
+        padding: 10px 12px !important;
+        white-space: pre-line !important;
+        line-height: 1.15 !important;
+        font-size: 14px !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
     col_nav_home, col_nav_spacer = st.columns([2.4, 5.6])
+
     with col_nav_home:
         if st.button("← Back\nto Treasury", use_container_width=True, type="secondary"):
             reset()
             st.switch_page("streamlit_app.py")
+
+            
 
 with st.sidebar:
     if st.button("← Back\nto Home", use_container_width=True):
