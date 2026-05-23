@@ -1179,10 +1179,24 @@ if mode is not None:
             st.switch_page("streamlit_app.py")
 
 with st.sidebar:
-    if st.button("← Back to Home", use_container_width=True):
+    st.markdown("""
+    <style>
+    section[data-testid="stSidebar"] div[data-testid="stButton"] > button {
+        min-height: 54px !important;
+        padding: 10px 12px !important;
+        white-space: pre-line !important;
+        line-height: 1.15 !important;
+        font-size: 14px !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+    if st.button("← Back\nto Home", use_container_width=True):
         st.switch_page("streamlit_app.py")
 
     st.markdown("<div style='height:6px'></div>", unsafe_allow_html=True)
+
+   
 
     mode_label = "📖 Training Mode" if IS_TRAINING else "🎮 Simulation Mode"
     mode_color = "#047857" if IS_TRAINING else "#F59E0B"
