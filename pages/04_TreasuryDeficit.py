@@ -582,7 +582,7 @@ SCENARIOS = [
         "tag": "💚 Reserve Injection",
         "tag_type": "green",
         "choice_type": "spending",
-        "training_amt": 400,
+        "training_amt": 200,
         "sim_opts": [100, 300, 400, 600],
         "sim_label": "How much does Treasury spend?",
         "involved": ["Treasury", "CentralBank", "BankX", "HouseholdB"],
