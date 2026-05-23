@@ -1159,7 +1159,7 @@ sc = SCENARIOS[min(step_i, len(SCENARIOS) - 1)]
 IS_TRAINING = mode == "training"
 
 if mode is not None:
-    col_nav_home, col_nav_spacer = st.columns([1, 5])
+    col_nav_home, col_nav_spacer = st.columns([2.2, 4.8])
     with col_nav_home:
         if st.button("← Back to Treasury", use_container_width=True, type="secondary"):
             reset()
