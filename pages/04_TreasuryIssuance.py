@@ -1098,7 +1098,7 @@ if st.session_state[ss("mode")] is None:
     if st.button("← Back to Home", use_container_width=False):
         st.switch_page("streamlit_app.py")
 
-    st.markdown("<div style='height:2rem'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height:3rem'></div>", unsafe_allow_html=True)
 
     st.markdown("""
         <div style='text-align:center;margin-bottom:2rem;'>
